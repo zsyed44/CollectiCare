@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^1.0.7
+  image_picker_for_web: any
 
 dev_dependencies:
   flutter_test:
