@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'test1.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -15,11 +16,18 @@ class Dashboard extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => test1()));
+              },
+              child: Text('Start Questioner'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
               child: Text('Logout'),
             ),
-            SizedBox(height: 20),
           ],
         ),
       ),
