@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
-import 'dashboard.dart'; // Import your dashboard screen
+import 'patient_dashboard.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Dashboard()),
+        MaterialPageRoute(builder: (context) => PatientDashboard()),
       );
     }
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class test1 extends StatefulWidget {
+class Test1 extends StatefulWidget {
   @override
   _QuestionnairePageState createState() => _QuestionnairePageState();
 }
 
-class _QuestionnairePageState extends State<test1> {
+class _QuestionnairePageState extends State<Test1> {
   final _formKey = GlobalKey<FormState>();
   Map<String, String> answers = {};
 
@@ -144,8 +144,7 @@ class _QuestionnairePageState extends State<test1> {
         ),
       );
 
-      // Optional: Navigate back or to a confirmation page
-      // Navigator.pop(context);
+      Navigator.pop(context, true); // Return true when submitted
     }
   }
 }

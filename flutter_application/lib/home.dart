@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
-import 'registration.dart';
+import 'register.dart';
 
 class Home extends StatelessWidget {
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'login.dart';
+import 'profile_registration.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _RegistrationState extends State<Registration> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileRegistration()));
               },
               child: Text('Register'),
             ),
