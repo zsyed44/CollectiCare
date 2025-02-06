@@ -1,4 +1,5 @@
 package com.example.backendApp.controller;
+import com.example.backendApp.model.Patient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
@@ -9,32 +10,31 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.backendApp.repository.PatientRepository;
 
+import java.util.List;
+
 
 @RestController
-@RequestMapping("/api") // Base URL for the API
+@RequestMapping("/api/patient") // Base URL for the API
 public class PatientController {
 
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
-    //get patient by id
-    @GetMapping("/{id}")
-    public String getPatient(@RequestParam String id) {
-        return patientRepository.findById(id);
-    }
-    
-    //create patient
-    @PostMapping
-    public String createPatient(@RequestBody User user) {
-        //whatever model is created for the usr can be used here
-        return patientRepository.create(user);
+    public PatientController(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
     }
 
-    //delete patient by id
-    @DeleteMapping("/{id}")
-    public String deletePatient(@RequestParam String id) {
-        return patientRepository.delete(id);
+    @PostMapping("/add")
+    public String addPatient(@RequestBody Patient patient) {
+        patientRepository.savePatient(patient);
+        return "Patient added successfully!";
     }
+
+    @GetMapping("/all")
+    public List<Patient> getAllPatients() {
+        return patientRepository.getAllPatients();
+    }
+
 }
 
 
