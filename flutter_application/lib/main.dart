@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/home.dart';
 //import 'package:flutter_application/home.dart';
 //import 'package:flutter_application/test1.dart';
-import 'package:flutter_application/profile_registration.dart';
+import 'package:flutter_application/test1b.dart';
 
 void main() {
   runApp(const MainApp());

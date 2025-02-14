@@ -4,6 +4,7 @@ import 'test2.dart';
 import 'test3.dart';
 import 'test4.dart';
 import 'test5.dart';
+import 'test1b.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -53,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
                 // Test Buttons
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Test1()));
+                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => InitialScreening()));
                     if (result == true) updateTestStatus(1);
                   },
                   child: Text('Initial Questionnaire'),
