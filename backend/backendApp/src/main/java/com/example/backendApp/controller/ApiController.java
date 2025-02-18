@@ -1,9 +1,12 @@
 package com.example.backendApp.controller;
 
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -15,9 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class ApiController {
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, World";
+   @GetMapping("/hello")
+    @ResponseBody
+    public Map<String, String> hello() {
+        return Map.of("message", "Hello, World");
     }
 
     @PostMapping("/create")
