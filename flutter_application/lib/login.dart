@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'patient_dashboard.dart';
+import 'services/api_service.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,6 +14,37 @@ class _LoginState extends State<Login> {
   Uint8List? _imageData;
   final picker = ImagePicker();
   bool _isLoggingIn = false;
+  final _idController = TextEditingController();
+
+  Future<void> login() async {
+    if (_imageData == null) return;
+
+    setState(() => _isLoggingIn = true);
+
+    try {
+      final response = await ApiService.post('auth/login', {
+        'id': _idController.text,
+        'photo': base64Encode(_imageData!)
+      });
+
+      if (response['success']) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PatientDashboard()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response['message'])),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    } finally {
+      setState(() => _isLoggingIn = false);
+    }
+  }
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -32,7 +65,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('LOGIN')),
@@ -40,14 +73,23 @@ class _LoginState extends State<Login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            TextField(
+              controller: _idController,
+              decoration: InputDecoration(
+                hintText: 'Enter ID',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isLoggingIn ? null : pickImage,
               child: Text(_isLoggingIn ? 'Logging in...' : 'Upload Photo to Login'),
             ),
-            if (_imageData != null) Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Image.memory(_imageData!, height: 100), // Show image
-            ),
+            if (_imageData != null) 
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Image.memory(_imageData!, height: 100),
+              ),
           ],
         ),
       ),
