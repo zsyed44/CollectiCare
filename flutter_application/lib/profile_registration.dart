@@ -27,7 +27,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
         _dobController.text = "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
       });
     }
-  }
+    }
 
   // Name validation (only letters)
   String? _validateName(String? value) {

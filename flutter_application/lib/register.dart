@@ -32,6 +32,36 @@ class _RegistrationState extends State<Registration> {
     });
   }
 
+  Future<void> _uploadPhoto() async {
+    if (!_isValidID) return;
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _imageBytes = bytes;
+      });
+
+      try {
+        final response = await ApiService.post('auth/register/photo', {
+          'id': _idController.text,
+          'photo': base64Encode(_imageBytes!)
+        });
+
+        if (response['success']) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Photo upload failed: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
