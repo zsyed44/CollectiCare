@@ -1,6 +1,5 @@
 package com.example.backendApp.config;
 
-import com.orientechnologies.orient.core.db.*;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

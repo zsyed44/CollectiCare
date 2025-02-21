@@ -20,3 +20,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/eyeUp.png
+    - assets/eyeDown.png
+    - assets/eyeLeft.png
+    - assets/eyeRight.png
