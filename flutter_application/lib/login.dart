@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'patient_dashboard.dart';
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
   _LoginState createState() => _LoginState();
 }

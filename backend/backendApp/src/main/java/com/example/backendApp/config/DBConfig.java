@@ -12,8 +12,8 @@ public class DBConfig {
 
     private static final String DB_NAME = "MedicalService";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Obaid";
-    private static final String ORIENTDB_HOST = "remote:10.0.0.253";
+    private static final String DB_PASSWORD = "Kwaku";
+    private static final String ORIENTDB_HOST = "remote:172.30.107.87";
 
     private OrientDB orientDB;
     private ODatabaseSession dbSession;

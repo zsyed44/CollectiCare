@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
-import 'login.dart';
 import 'profile_registration.dart';
 
 class Registration extends StatefulWidget {
+  const Registration({super.key});
+
   @override
   _RegistrationState createState() => _RegistrationState();
 }

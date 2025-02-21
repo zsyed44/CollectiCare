@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 
 class ProfileRegistration extends StatefulWidget {
+  const ProfileRegistration({super.key});
+
   @override
   _ProfileRegistrationState createState() => _ProfileRegistrationState();
 }

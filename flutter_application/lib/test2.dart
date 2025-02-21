@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 
-class Test2 extends StatelessWidget {
+class ImageEyeTest extends StatefulWidget {
+  const ImageEyeTest({super.key});
+
+  @override
+  _EyeTestState createState() => _EyeTestState();
+}
+
+class _EyeTestState extends State<ImageEyeTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Test 2')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        appBar: AppBar(title: Text('Perform Eye Test')),
+        body: PageView(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, true); // Returns true when submitted
-              },
-              child: Text('Submit Test 2'),
+            Container(
+              color: Colors.red,
             ),
+            Container(
+              color: Colors.green,
+            ),
+            Container(
+              color: Colors.blue,
+            )
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

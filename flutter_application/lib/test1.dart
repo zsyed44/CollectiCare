@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Test1 extends StatefulWidget {
+  const Test1({super.key});
+
   @override
   _QuestionnairePageState createState() => _QuestionnairePageState();
 }
@@ -63,7 +65,7 @@ class _QuestionnairePageState extends State<Test1> {
                 SizedBox(height: 20),
 
                 // Questions
-                ...questions.map((question) => _buildQuestionItem(question)).toList(),
+                ...questions.map((question) => _buildQuestionItem(question)),
 
                 SizedBox(height: 20),
 

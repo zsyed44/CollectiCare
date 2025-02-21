@@ -6,7 +6,9 @@ class PatientDashboard extends StatelessWidget {
   final String dob = "1995-08-15"; // YYYY-MM-DD
   final int age = DateTime.now().year - 1995; // Auto-calculated age
   final String imagePath = "assets/profile.jpg"; // Use a local asset image
-  final String eyeStatus = "Normal"; // Eye status example
+  final String eyeStatus = "Normal";
+
+  PatientDashboard({super.key}); // Eye status example
 
   @override
   Widget build(BuildContext context) {
