@@ -7,20 +7,24 @@ public class Patient {
     private String name;
     private Date dob;
     private String gisLocation;
+    private String phone;
     private String govtID;
     private String contactInfo;
     private boolean consentForFacialRecognition;
 
-    public Patient(String patientID, String name, Date dob, String gisLocation, String govtID, String contactInfo, boolean consentForFacialRecognition) {
-        this.patientID = patientID;
-        this.name = name;
-        this.dob = dob;
-        this.gisLocation = gisLocation;
+    public Patient(String patientID, String name, Date dob, String gisLocation, String govtID, String contactInfo, boolean consentForFacialRecognition, String phone) {
+        this.patientID = patientID; //
+        this.name = name; //
+        this.dob = dob; //
+        this.gisLocation = gisLocation; //
         this.govtID = govtID;
+        // phone numbers
+        this.phone = phone;
         this.contactInfo = contactInfo;
         this.consentForFacialRecognition = consentForFacialRecognition;
     }
 
+    // id, name, dob(YEAR MONTH DATE), campLocation, Phone
     public String getPatientID() { return patientID; }
     public String getName() { return name; }
     public Date getDob() { return dob; }
@@ -28,6 +32,7 @@ public class Patient {
     public String getGovtID() { return govtID; }
     public String getContactInfo() { return contactInfo; }
     public boolean isConsentForFacialRecognition() { return consentForFacialRecognition; }
+    public String  getPhone() { return phone; }
 
     public void setPatientID(String patientID) { this.patientID = patientID; }
     public void setName(String name) { this.name = name; }
@@ -36,4 +41,5 @@ public class Patient {
     public void setGovtID(String govtID) { this.govtID = govtID; }
     public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
     public void setConsentForFacialRecognition(boolean consentForFacialRecognition) { this.consentForFacialRecognition = consentForFacialRecognition; }
+    public void setPhone(String phone) { this.phone = phone; }
 }
