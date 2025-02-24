@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'services/api_service.dart';
 
 class ProfileRegistration extends StatefulWidget {
+  final String userId;
+  ProfileRegistration({required this.userId});
   @override
   _ProfileRegistrationState createState() => _ProfileRegistrationState();
 }
@@ -27,7 +30,32 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
         _dobController.text = "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
       });
     }
+  }
+
+  Future<void> _submitProfile() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        final response = await ApiService.post('auth/register/profile', {
+          'id': widget.userId,
+          'name': _nameController.text,
+          'dob': _dobController.text,
+          'campLocation': _addressController.text,
+          'phone': _phoneController.text,
+        });
+
+        if (response['success']) {
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => Login())
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: $e')),
+        );
+      }
     }
+  }
 
   // Name validation (only letters)
   String? _validateName(String? value) {
@@ -87,7 +115,12 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () => _submitProfile(),
+                child: Text('Submit'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {     
                   if (_formKey.currentState!.validate()) {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                   }
