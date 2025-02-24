@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'login.dart';
 import 'profile_registration.dart';
+import 'services/api_service.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -93,7 +95,7 @@ class _RegistrationState extends State<Registration> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProfileRegistration()));
+                        builder: (context) => ProfileRegistration(userId: _idController.text)));
               },
               child: Text('Register'),
             ),
