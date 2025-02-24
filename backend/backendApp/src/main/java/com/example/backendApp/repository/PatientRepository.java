@@ -4,20 +4,16 @@ import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.impl.ODocument;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.example.backendApp.model.Patient;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Optional;
 
-
-//THIS WILL BE USED TO CONNECT TO THE DATABASE
 @Repository
 public class PatientRepository {
-
     private final ODatabaseSession dbSession;
 
     public PatientRepository(ODatabaseSession dbSession) {
@@ -26,11 +22,14 @@ public class PatientRepository {
 
     public void savePatient(Patient patient) {
         try {
-            ensureActiveSession();
             ODocument doc = new ODocument("Patient");
+            doc.field("PatientID", patient.getPatientID());
             doc.field("Name", patient.getName());
-            doc.field("Age", patient.getAge());
-            doc.field("CampID", patient.getCampID());
+            doc.field("DOB", patient.getDob());
+            doc.field("GIS_Location", patient.getGisLocation());
+            doc.field("Govt_ID", patient.getGovtID());
+            doc.field("ContactInfo", patient.getContactInfo());
+            doc.field("ConsentForFacialRecognition", patient.isConsentForFacialRecognition());
             doc.save();
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,41 +38,27 @@ public class PatientRepository {
 
     public List<Patient> getAllPatients() {
         List<Patient> patients = new ArrayList<>();
+        var resultSet = dbSession.query("SELECT * FROM Patient");
 
-        try {
-            ensureActiveSession();
-            var resultSet = dbSession.query("SELECT * FROM Patient");
-
-            while (resultSet.hasNext()) {
-                var result = resultSet.next();
-                if (result.getRecord().isPresent()) {
-                    ORecord record = result.getRecord().get();
-                    if (record instanceof ODocument doc) {
-                        String name = doc.field("Name", String.class);
-                        Integer age = doc.field("Age", Integer.class);
-                        Integer campID = doc.field("CampID", Integer.class);
-
-                        // Handle possible null values with default values
-                        name = (name != null) ? name : "Unknown";
-                        age = (age != null) ? age : 0;
-                        campID = (campID != null) ? campID : -1; // i added a space in the field name :3, so doesn't work
-
-                        patients.add(new Patient(name, age, campID));
-                    }
-                }
+        while (resultSet.hasNext()) {
+            var result = resultSet.next();
+            if (result.getRecord().isPresent()) {
+                ODocument doc = (ODocument) result.getRecord().get();
+                patients.add(new Patient(
+                        doc.field("PatientID", String.class),
+                        doc.field("Name", String.class),
+                        doc.field("DOB", Date.class),
+                        doc.field("GIS_Location", String.class),
+                        doc.field("Govt_ID", String.class),
+                        doc.field("ContactInfo", String.class),
+                        doc.field("ConsentForFacialRecognition", Boolean.class)
+                ));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
         return patients;
     }
 
-
-    private void ensureActiveSession() {
-        if (dbSession == null || dbSession.isClosed()) {
-            throw new IllegalStateException("Database session is not active.");
-        }
-        ODatabaseRecordThreadLocal.instance().set((ODatabaseDocumentInternal) dbSession);
+    public void deletePatient(String patientID) {
+        dbSession.command("DELETE VERTEX Patient WHERE PatientID = ?", patientID);
     }
 }
