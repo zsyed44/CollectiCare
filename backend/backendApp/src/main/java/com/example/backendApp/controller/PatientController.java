@@ -12,12 +12,9 @@ import com.example.backendApp.repository.PatientRepository;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/api/patient") // Base URL for the API
+@RequestMapping("/api/patient")
 public class PatientController {
-
-
     private final PatientRepository patientRepository;
 
     public PatientController(PatientRepository patientRepository) {
@@ -35,7 +32,15 @@ public class PatientController {
         return patientRepository.getAllPatients();
     }
 
+    // get method for individual patient
+
+    @DeleteMapping("/delete")
+    public String deletePatient(@RequestParam String patientID) {
+        patientRepository.deletePatient(patientID);
+        return "Patient deleted successfully!";
+    }
 }
+
 
 
 
