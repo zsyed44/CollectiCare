@@ -16,6 +16,9 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
+  // Gender field with default value set to 'Female'
+  String _selectedGender = "Female";
+
   // Function to show date picker
   Future<void> _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -35,18 +38,26 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   Future<void> _submitProfile() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await ApiService.post('auth/register/profile', {
-          'id': widget.userId,
+        final response = await ApiService.post('patient/add', {
+          'patientID': widget.userId,
           'name': _nameController.text,
           'dob': _dobController.text,
-          'campLocation': _addressController.text,
+          'gisLocation': 'POINT(0 0)', // temporary/default location
+          'govtID': '123456789012', // temporary/default government ID
+          'contactInfo': _phoneController.text, // temporary/default contact
+          'consentForFacialRecognition': true, // temporary/default consent
           'phone': _phoneController.text,
+          'address': _addressController.text,
+          'eyeStatus': 'Normal', // temporary/default eye status
+          'gender': _selectedGender // include gender in the submission
         });
 
-        if (response['success']) {
+        print('API response: $response');
+
+        if (!response.containsKey('error')) {
           Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(builder: (context) => Login())
+            context,
+            MaterialPageRoute(builder: (context) => Login()),
           );
         }
       } catch (e) {
@@ -102,9 +113,29 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
                 onTap: () => _selectDate(context),
               ),
               SizedBox(height: 20),
+              // Gender dropdown field
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
+                decoration: InputDecoration(
+                  labelText: 'Gender',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['Male', 'Female', 'Other'].map((String gender) {
+                  return DropdownMenuItem<String>(
+                    value: gender,
+                    child: Text(gender),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedGender = newValue!;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: _addressController,
-                decoration: InputDecoration(hintText: 'Camp Location'),//location will be used for data access
+                decoration: InputDecoration(hintText: 'Camp Location'),
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -115,14 +146,17 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => _submitProfile(),
+                onPressed: _submitProfile,
                 child: Text('Submit'),
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {     
+                onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
                   }
                 },
                 child: Text('Create Profile'),
