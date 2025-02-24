@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Temporary files
+**/generated_plugin_registrant.cc
+**/GeneratedPluginRestraint.swift
+**/generated_plugins.cmake

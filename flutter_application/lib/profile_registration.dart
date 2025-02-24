@@ -38,16 +38,23 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   Future<void> _submitProfile() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await ApiService.post('auth/register/profile', {
-          'id': widget.userId,
+        final response = await ApiService.post('patient/add', {
+          'patientID': widget.userId,
           'name': _nameController.text,
           'dob': _dobController.text,
-          'gender': _selectedGender, // include gender in the submission
-          'campLocation': _addressController.text,
+          'gisLocation': 'POINT(0 0)', // temporary/default location
+          'govtID': '123456789012', // temporary/default government ID
+          'contactInfo': _phoneController.text, // temporary/default contact
+          'consentForFacialRecognition': true, // temporary/default consent
           'phone': _phoneController.text,
+          'address': _addressController.text,
+          'eyeStatus': 'Normal', // temporary/default eye status
+          'gender': _selectedGender // include gender in the submission
         });
 
-        if (response['success']) {
+        print('API response: $response');
+
+        if (!response.containsKey('error')) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Login()),

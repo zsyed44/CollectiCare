@@ -22,6 +22,14 @@ class _RegistrationState extends State<Registration> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
+
+      await Future.delayed(Duration(seconds: 3)); // Simulate login delay
+
+      // Automatically navigate to profile registration page after photo upload
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)));
+      
       setState(() {
         _imageBytes = bytes;
       });
@@ -34,7 +42,7 @@ class _RegistrationState extends State<Registration> {
     });
   }
 
-  Future<void> _uploadPhoto() async {
+  Future<void> _uploadPhoto() async { // Needs to be altered to follow the new API
     if (!_isValidID) return;
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     
@@ -82,23 +90,25 @@ class _RegistrationState extends State<Registration> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isValidID ? pickImage : null, // Disable button if invalid
-              child: Text('Upload Photo'),
+              child: Text('Upload Photo to Register Patient'),
             ),
             if (_imageBytes != null)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.memory(_imageBytes!, height: 100),
               ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfileRegistration(userId: _idController.text)));
-              },
-              child: Text('Register'),
-            ),
+            
+            // SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => ProfileRegistration(userId: _idController.text)));
+            //   },
+            //   child: Text('Register'),
+            // ),
+
           ],
         ),
       ),
