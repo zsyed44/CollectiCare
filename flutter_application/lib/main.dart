@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_application/home.dart';
+//import 'package:flutter_application/home.dart';
+//import 'package:flutter_application/test1.dart';
+import 'package:flutter_application/test1b.dart';
+import 'package:flutter_application/dashboard.dart';
 import 'home.dart';
 import 'temporary_page.dart';
 
@@ -16,6 +21,9 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+// <<<<<<< Peak-Vision-Test
+//       home: Dashboard(),
+// =======
       debugShowCheckedModeBanner: false, // Hide debug banner
 
       // Set TempPage as the first page, but make "/" refer to Home

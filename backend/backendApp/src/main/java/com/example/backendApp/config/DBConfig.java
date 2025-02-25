@@ -1,5 +1,6 @@
 package com.example.backendApp.config;
 
+import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.db.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DBConfig {
     private static final String DB_NAME = "MedicalService";
-    private static final String DB_USER = "root";
+    private static final String DB_USER = "root"
     private static final String DB_PASSWORD = "Obaid";
     private static final String ORIENTDB_HOST = "remote:10.0.0.6";
 

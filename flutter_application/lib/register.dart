@@ -6,6 +6,8 @@ import 'profile_registration.dart';
 import 'services/api_service.dart';
 
 class Registration extends StatefulWidget {
+  const Registration({super.key});
+
   @override
   _RegistrationState createState() => _RegistrationState();
 }

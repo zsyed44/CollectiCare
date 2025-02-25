@@ -9,6 +9,8 @@ import 'temporary_page.dart';
 String thisCity = selectedCity;
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
   _LoginState createState() => _LoginState();
 }

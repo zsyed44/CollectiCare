@@ -7,6 +7,8 @@ import 'test5.dart';
 import 'test1b.dart';
 
 class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -21,7 +23,11 @@ class _DashboardState extends State<Dashboard> {
 
   // Function to check if all tests are completed
   bool get allTestsCompleted =>
-      test1Completed && test2Completed && test3Completed && test4Completed && test5Completed;
+      test1Completed &&
+      test2Completed &&
+      test3Completed &&
+      test4Completed &&
+      test5Completed;
 
   void updateTestStatus(int testNumber) {
     setState(() {
@@ -48,57 +54,78 @@ class _DashboardState extends State<Dashboard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Welcome to the Dashboard!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('Welcome to the Dashboard!',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 SizedBox(height: 20),
 
                 // Test Buttons
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => InitialScreening()));
+                    final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InitialScreening()));
                     if (result == true) updateTestStatus(1);
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          test1Completed ? Colors.green : Colors.blue),
                   child: Text('Initial Questionnaire'),
-                  style: ElevatedButton.styleFrom(backgroundColor: test1Completed ? Colors.green : Colors.blue),
                 ),
                 SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Test2()));
+                    final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ImageEyeTest()));
                     if (result == true) updateTestStatus(2);
                   },
-                  child: Text('Test 2'),
-                  style: ElevatedButton.styleFrom(backgroundColor: test2Completed ? Colors.green : Colors.blue),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          test2Completed ? Colors.green : Colors.blue),
+                  child: Text('Perform Eye Test'),
                 ),
                 SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Test3()));
+                    final result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Test3()));
                     if (result == true) updateTestStatus(3);
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          test3Completed ? Colors.green : Colors.blue),
                   child: Text('Test 3'),
-                  style: ElevatedButton.styleFrom(backgroundColor: test3Completed ? Colors.green : Colors.blue),
                 ),
                 SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Test4()));
+                    final result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Test4()));
                     if (result == true) updateTestStatus(4);
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          test4Completed ? Colors.green : Colors.blue),
                   child: Text('Test 4'),
-                  style: ElevatedButton.styleFrom(backgroundColor: test4Completed ? Colors.green : Colors.blue),
                 ),
                 SizedBox(height: 10),
 
                 ElevatedButton(
                   onPressed: () async {
-                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Test5()));
+                    final result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Test5()));
                     if (result == true) updateTestStatus(5);
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          test5Completed ? Colors.green : Colors.blue),
                   child: Text('Test 5'),
-                  style: ElevatedButton.styleFrom(backgroundColor: test5Completed ? Colors.green : Colors.blue),
                 ),
                 SizedBox(height: 30),
 
@@ -111,8 +138,10 @@ class _DashboardState extends State<Dashboard> {
                           );
                         }
                       : null,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          allTestsCompleted ? Colors.green : Colors.grey),
                   child: Text('Final Upload'),
-                  style: ElevatedButton.styleFrom(backgroundColor: allTestsCompleted ? Colors.green : Colors.grey),
                 ),
                 SizedBox(height: 20),
 

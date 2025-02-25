@@ -6,6 +6,8 @@ import 'services/api_service.dart';
 class PatientDashboard extends StatelessWidget {
 
   final String imagePath = "assets/profile.jpg"; // Use a local asset image
+
+//   PatientDashboard({super.key}); // Eye status example
   String patientID;
   String name;
   String dob;
