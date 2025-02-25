@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 
+String selectedCity = "";
+
 class TempPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,20 +13,35 @@ class TempPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home())),
+              onPressed: () {
+                selectedCity = "London";
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
               child: Text("Login to London"),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home())),
+              onPressed: () {
+                selectedCity = "Montreal";
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
               child: Text("Login to Montreal"),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home())),
+              onPressed: () {
+                selectedCity = "Toronto";
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
               child: Text("Login to Toronto"),
             ),
           ],

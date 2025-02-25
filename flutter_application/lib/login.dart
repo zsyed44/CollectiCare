@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'patient_dashboard.dart';
 import 'services/api_service.dart';
+import 'temporary_page.dart';
+
+String thisCity = selectedCity;
 
 class Login extends StatefulWidget {
   @override
@@ -16,25 +19,51 @@ class _LoginState extends State<Login> {
   bool _isLoggingIn = false;
   final _idController = TextEditingController();
 
+  String name = '', dob = '', eyeStatus = '';
+  int age = 0;
+
+  Future<void> fetchAndSetValues(patientID) async {
+    try {
+      final response = await ApiService.get('patient/$patientID/summary');
+      if (response == null || response.containsKey("error")) {
+        throw Exception("Failed to load data");
+      }
+      print(response);
+
+      name = response["Name"];
+      dob = response["DOB"].split("T")[0]; // The split is to remove the time component from the DOB
+      eyeStatus = response["Eye Status"];
+      age = DateTime.now().year - int.parse(dob.substring(0, 4));
+      print ("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+
   Future<void> login() async {
     if (_imageData == null) return;
 
     setState(() => _isLoggingIn = true);
 
     try {
-      final response = await ApiService.post('auth/login', {
-        'id': _idController.text,
-        'photo': base64Encode(_imageData!)
-      });
+      String id = _idController.text;
+      final response = await ApiService.get('patient/$id/$thisCity');
 
-      if (response['success']) {
+      if (response != null && response['patientID'] != null) {
+
+        await fetchAndSetValues(id);
+        print ("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
+
+        await Future.delayed(Duration(seconds: 3)); // Simulate login delay
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => PatientDashboard()),
+          MaterialPageRoute(builder: (context) => PatientDashboard(patientID: id, name: name, dob: dob, eyeStatus: eyeStatus, age: age)),
         );
       } else {
+        // If the patient is not found
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response['message'])),
+          SnackBar(content: Text('Patient not found or does not exist')),
         );
       }
     } catch (e) {
@@ -56,12 +85,14 @@ class _LoginState extends State<Login> {
         _isLoggingIn = true; // Show loading state
       });
 
-      await Future.delayed(Duration(seconds: 3)); // Simulate login delay
+      login(); // Call the login function
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => PatientDashboard()),
-      );
+      // await Future.delayed(Duration(seconds: 3)); // Simulate login delay
+
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => PatientDashboard(userId: _idController.text)),
+      // );
     }
   }
 

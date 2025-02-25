@@ -55,6 +55,20 @@ public class PatientController {
         }
     }
 
+
+    @GetMapping("/{patientID}/{address}")
+    public ResponseEntity<?> searchPatientByIdAndAddress(@PathVariable String patientID, @PathVariable String address) {
+        try {
+            Optional<Patient> patient = patientRepository.getPatientByIdAndAddress(patientID, address);
+            return patient.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(404)
+                            .body((Patient) Map.of("error", "Patient not found")));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", "An error occurred while fetching the patient", "details", e.getMessage()));
+        }
+    }
+
     /**
      * Fetch specific details of a patient: Name, Age, DOB, Eye Status, and Health Camp Address.
      * This method returns a hardcoded response for now.
@@ -66,10 +80,6 @@ public class PatientController {
             if (patient.isPresent()) {
                 Patient p = patient.get();
 
-                // Default filler values
-                String eyeStatus = "Normal";  // Default assumption
-                String healthCampAddress = "Unknown Health Camp";  // Default placeholder
-
                 // Calculate age from DOB
                 int age = calculateAge(p.getDob());
 
@@ -78,8 +88,8 @@ public class PatientController {
                         "Name", p.getName(),
                         "Age", age,
                         "DOB", p.getDob(),
-                        "Eye Status", eyeStatus,
-                        "Health Camp Address", healthCampAddress
+                        "Eye Status", p.getEyeStatus(),
+                        "Health Camp Address", p.getAddress()
                 );
                 return ResponseEntity.ok(summary);
             } else {

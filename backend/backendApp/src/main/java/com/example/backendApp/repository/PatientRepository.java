@@ -77,6 +77,25 @@ public Optional<Patient> getPatientById(String patientID) {
 }
 
 /**
+ * Retrieve a specific patient by ID & Camp Address.
+ */
+public Optional<Patient> getPatientByIdAndAddress(String patientID, String address) {
+    try {
+        ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
+        var resultSet = dbSession.query("SELECT FROM Patient WHERE PatientID = ? AND Address = ?", patientID, address);
+        if (resultSet.hasNext()) {
+            var result = resultSet.next();
+            if (result.getRecord().isPresent()) {
+                return Optional.of(mapToPatient((ODocument) result.getRecord().get()));
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("❌ Error retrieving patient by ID: " + e.getMessage());
+    }
+    return Optional.empty();
+}
+
+/**
  * Add a new patient to the database.
  */
 public boolean addPatient(Patient patient) {
