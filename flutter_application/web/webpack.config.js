@@ -6,7 +6,7 @@ module.exports = merge(common, {
     devServer: {
         proxy: {
             "/api": {
-                target: "http://localhost:8080",
+                target: "http://localhost:8080", // our Spring Boot port
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: { "^/api": "" }

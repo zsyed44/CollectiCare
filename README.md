@@ -8,6 +8,7 @@ This project aims to develop an **offline-first mobile application** designed fo
 - **Data Synchronization**: Seamlessly sync local data with the central database when online.
 - **User Authentication**: Secure login for healthcare workers.
 - **Structured Medical Questionnaires**: Standardized forms for patient diagnosis and treatment tracking.
+- **Eye Testing**: Various tools in the application to hold on patient eye tests.
 - **Cross-Platform Support**: Built with Flutter to support both Android and iOS.
 
 ## **Tech Stack**
@@ -15,7 +16,7 @@ This project aims to develop an **offline-first mobile application** designed fo
 - **Flutter** (Dart): Cross-platform framework for mobile development.
 
 ### **Backend**
-- **Node.js & Express**: Handles API requests and business logic.
+- **SpringBoot & Express**: Handles API requests and business logic.
 
 ### **Database**
 - **OrientDB**: NoSQL multi-model database for scalable data management.

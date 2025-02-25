@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'profile_registration.dart';
+import 'services/api_service.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -21,6 +23,14 @@ class _RegistrationState extends State<Registration> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
+
+      await Future.delayed(Duration(seconds: 3)); // Simulate login delay
+
+      // Automatically navigate to profile registration page after photo upload
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)));
+      
       setState(() {
         _imageBytes = bytes;
       });
@@ -31,6 +41,36 @@ class _RegistrationState extends State<Registration> {
     setState(() {
       _isValidID = RegExp(r'^\d{12}$').hasMatch(value); // Checks for exactly 12 digits
     });
+  }
+
+  Future<void> _uploadPhoto() async { // Needs to be altered to follow the new API
+    if (!_isValidID) return;
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _imageBytes = bytes;
+      });
+
+      try {
+        final response = await ApiService.post('auth/register/photo', {
+          'id': _idController.text,
+          'photo': base64Encode(_imageBytes!)
+        });
+
+        if (response['success']) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Photo upload failed: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -51,23 +91,25 @@ class _RegistrationState extends State<Registration> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isValidID ? pickImage : null, // Disable button if invalid
-              child: Text('Upload Photo'),
+              child: Text('Upload Photo to Register Patient'),
             ),
             if (_imageBytes != null)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.memory(_imageBytes!, height: 100),
               ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfileRegistration()));
-              },
-              child: Text('Register'),
-            ),
+            
+            // SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => ProfileRegistration(userId: _idController.text)));
+            //   },
+            //   child: Text('Register'),
+            // ),
+
           ],
         ),
       ),

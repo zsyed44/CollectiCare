@@ -2,22 +2,41 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
-  static Future<Map<String, dynamic>?> fetchData() async {
-    try {
-      final response = await http.get(Uri.parse('/api/hello'));
+  static const String baseUrl = 'http://127.0.0.1:8080/api';
 
-      // Ensure response is JSON before decoding
-      if (response.statusCode == 200 &&
-          response.headers['content-type']?.contains('application/json') == true) {
-        return json.decode(response.body); // Convert JSON to Map
-      } else {
-        print('Error: Received non-JSON response');
-        print('Response Body: ${response.body}');
-        return null;
-      }
-    } catch (e) {
-      print('Exception: $e');
-      return null;
-    }
+  static final headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  };
+
+
+  // GET request
+  static Future<dynamic> get(String endpoint) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: headers
+    );
+    return json.decode(response.body);
+  }
+
+
+  // POST request
+  static Future<dynamic> post(String endpoint, dynamic data) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: headers,
+      body: json.encode(data)
+    );
+    return json.decode(response.body);
   }
 }
+
+  // // Handle response
+  // static dynamic _handleResponse(http.Response response) {
+  //   if (response.statusCode == 200) {
+  //     return json.decode(response.body);
+  //   } else {
+  //     throw Exception('Failed: ${response.statusCode}');
+  //   }
+  
+

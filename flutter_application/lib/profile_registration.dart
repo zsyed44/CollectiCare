@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'services/api_service.dart';
+import 'temporary_page.dart';
+
+String thisCity = selectedCity;
 
 class ProfileRegistration extends StatefulWidget {
-  const ProfileRegistration({super.key});
+//   const ProfileRegistration({super.key});
 
+  final String userId;
+  ProfileRegistration({required this.userId});
   @override
   _ProfileRegistrationState createState() => _ProfileRegistrationState();
 }
@@ -14,6 +20,9 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+
+  // Gender field with default value set to 'Female'
+  String _selectedGender = "Female";
 
   // Function to show date picker
   Future<void> _selectDate(BuildContext context) async {
@@ -28,6 +37,39 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
       setState(() {
         _dobController.text = "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
       });
+    }
+  }
+
+  Future<void> _submitProfile() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        final response = await ApiService.post('patient/add', {
+          'patientID': widget.userId,
+          'name': _nameController.text,
+          'dob': _dobController.text,
+          'gisLocation': 'POINT(0 0)', // temporary/default location
+          'govtID': '123456789012', // temporary/default government ID
+          'contactInfo': _phoneController.text, // temporary/default contact
+          'consentForFacialRecognition': true, // temporary/default consent
+          'phone': _phoneController.text,
+          'address': thisCity, // The city that the health camp is in
+          'eyeStatus': 'Normal', // temporary/default eye status
+          'gender': _selectedGender // include gender in the submission
+        });
+
+        print('API response: $response');
+
+        if (!response.containsKey('error')) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Login()),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: $e')),
+        );
+      }
     }
   }
 
@@ -76,9 +118,29 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
                 onTap: () => _selectDate(context),
               ),
               SizedBox(height: 20),
+              // Gender dropdown field
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
+                decoration: InputDecoration(
+                  labelText: 'Gender',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['Male', 'Female', 'Other'].map((String gender) {
+                  return DropdownMenuItem<String>(
+                    value: gender,
+                    child: Text(gender),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedGender = newValue!;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: _addressController,
-                decoration: InputDecoration(hintText: 'Camp Location'),//location will be used for data access
+                decoration: InputDecoration(hintText: 'Camp Location'),
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -89,13 +151,21 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                  }
-                },
+                onPressed: _submitProfile,
                 child: Text('Create Profile'),
               ),
+              // SizedBox(height: 20),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     if (_formKey.currentState!.validate()) {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (context) => Login()),
+              //       );
+              //     }
+              //   },
+              //   child: Text('Create Profile'),
+              // ),
             ],
           ),
         ),
