@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'services/api_service.dart';
+import 'temporary_page.dart';
+
+String thisCity = selectedCity;
 
 class ProfileRegistration extends StatefulWidget {
   final String userId;
@@ -47,7 +50,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
           'contactInfo': _phoneController.text, // temporary/default contact
           'consentForFacialRecognition': true, // temporary/default consent
           'phone': _phoneController.text,
-          'address': _addressController.text,
+          'address': thisCity, // The city that the health camp is in
           'eyeStatus': 'Normal', // temporary/default eye status
           'gender': _selectedGender // include gender in the submission
         });
@@ -147,20 +150,20 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitProfile,
-                child: Text('Submit'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  }
-                },
                 child: Text('Create Profile'),
               ),
+              // SizedBox(height: 20),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     if (_formKey.currentState!.validate()) {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (context) => Login()),
+              //       );
+              //     }
+              //   },
+              //   child: Text('Create Profile'),
+              // ),
             ],
           ),
         ),
