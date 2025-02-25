@@ -119,7 +119,7 @@ class _DashboardState extends State<Dashboard> {
                 // Logout Button
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    Navigator.pushReplacementNamed(context, '/home');
                   },
                   child: Text('Logout'),
                 ),
