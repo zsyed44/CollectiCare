@@ -55,7 +55,6 @@ class _InitialScreeningState extends State<InitialScreening> {
   String? contactLensesDuration;
   String? contactLensesFrequency;
 
-
   //Eye Surgical History
   bool retinaLaser = false;
   bool cataractSurgery = false;
@@ -88,25 +87,33 @@ class _InitialScreeningState extends State<InitialScreening> {
     });
   }
 
-  Widget buildToggleButton(String category, List<String> options, String? selectedValue) {
+  Widget buildToggleButton(
+      String category, List<String> options, String? selectedValue) {
     return Row(
       children: options.map((option) {
         return Padding(
-          padding: const EdgeInsets.only(right: 10.0), // Spacing between buttons
+          padding: const EdgeInsets.only(right: 10.0),
           child: ChoiceChip(
-            label: Text(option),
+            label: Text(option,
+                style: TextStyle(
+                    color:
+                        selectedValue == option ? Colors.white : Colors.black)),
             selected: selectedValue == option,
             onSelected: (selected) {
               if (selected) updateState(category, option);
             },
-            selectedColor: Colors.blue.shade100,
+            selectedColor: Colors.blue.shade700, // Deep blue when selected
+            backgroundColor:
+                Colors.grey.shade300, // Light grey when not selected
+            labelStyle: TextStyle(fontWeight: FontWeight.bold),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget buildRowToggleButton(String label, String category, List<String> options, String? selectedValue) {
+  Widget buildRowToggleButton(String label, String category,
+      List<String> options, String? selectedValue) {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0), // Indent sub-questions
       child: Row(
@@ -122,30 +129,30 @@ class _InitialScreeningState extends State<InitialScreening> {
     );
   }
 
-  Widget buildYesNoQuestion(String title, bool value, Function(bool) onChanged) {
+  Widget buildYesNoQuestion(
+      String title, bool value, Function(bool) onChanged) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // Bold for main questions
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         Row(
           children: [
-            Text("Yes"),
-            SizedBox(width: 5),
+            Text("Yes", style: TextStyle(color: Colors.blue)),
             Checkbox(
               value: value,
               onChanged: (newValue) => setState(() => onChanged(newValue!)),
+              activeColor: Colors.blue, // Blue checkboxes
             ),
-            SizedBox(width: 10),
-            Text("No"),
-            SizedBox(width: 5),
+            Text("No", style: TextStyle(color: Colors.blue)),
             Checkbox(
               value: !value,
               onChanged: (newValue) => setState(() => onChanged(!newValue!)),
+              activeColor: Colors.blue,
             ),
           ],
         ),
@@ -163,27 +170,31 @@ class _InitialScreeningState extends State<InitialScreening> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Bold Text with size 18
-            Text("Ophthalmology History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Ophthalmology History",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             // Loss of Vision (Main Question)
             buildYesNoQuestion("Loss of Vision", hasVisionLoss, (value) {
               hasVisionLoss = value;
               if (!hasVisionLoss) {
-                selectedEyeVision = onsetVision = durationVision = hasVisionPain = null;
+                selectedEyeVision =
+                    onsetVision = durationVision = hasVisionPain = null;
               }
             }),
 
             if (hasVisionLoss) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Which Eye(s)", "eyeVision", ["R", "L", "Both"], selectedEyeVision),
+              buildRowToggleButton("Which Eye(s)", "eyeVision",
+                  ["R", "L", "Both"], selectedEyeVision),
               SizedBox(height: 10),
-              buildRowToggleButton("Onset", "onsetVision", ["Sudden", "Gradual"], onsetVision),
+              buildRowToggleButton(
+                  "Onset", "onsetVision", ["Sudden", "Gradual"], onsetVision),
               SizedBox(height: 10),
-              buildRowToggleButton("Pain", "painVision", ["Yes", "No"], hasVisionPain),
+              buildRowToggleButton(
+                  "Pain", "painVision", ["Yes", "No"], hasVisionPain),
               SizedBox(height: 10),
-              buildRowToggleButton("Duration", "durationVision", ["<2 Years", "2-5 Years", "5+ Years"], durationVision),
+              buildRowToggleButton("Duration", "durationVision",
+                  ["<2 Years", "2-5 Years", "5+ Years"], durationVision),
               //add text size 20
-
-
             ],
 
             SizedBox(height: 15),
@@ -192,19 +203,24 @@ class _InitialScreeningState extends State<InitialScreening> {
             buildYesNoQuestion("Redness", hasRedness, (value) {
               hasRedness = value;
               if (!hasRedness) {
-                selectedEyeRedness = onsetRedness = durationRedness = hasRednessPain = null;
+                selectedEyeRedness =
+                    onsetRedness = durationRedness = hasRednessPain = null;
               }
             }),
 
             if (hasRedness) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Which Eye(s)", "eyeRedness", ["R", "L", "Both"], selectedEyeRedness),
+              buildRowToggleButton("Which Eye(s)", "eyeRedness",
+                  ["R", "L", "Both"], selectedEyeRedness),
               SizedBox(height: 10),
-              buildRowToggleButton("Onset", "onsetRedness", ["Sudden", "Gradual"], onsetRedness),
+              buildRowToggleButton(
+                  "Onset", "onsetRedness", ["Sudden", "Gradual"], onsetRedness),
               SizedBox(height: 10),
-              buildRowToggleButton("Pain", "painRedness", ["Yes", "No"], hasRednessPain),
+              buildRowToggleButton(
+                  "Pain", "painRedness", ["Yes", "No"], hasRednessPain),
               SizedBox(height: 10),
-              buildRowToggleButton("Duration", "durationRedness", ["<1 Week", "1-4 Weeks", "4+ Weeks"], durationRedness),
+              buildRowToggleButton("Duration", "durationRedness",
+                  ["<1 Week", "1-4 Weeks", "4+ Weeks"], durationRedness),
             ],
 
             SizedBox(height: 15),
@@ -213,21 +229,27 @@ class _InitialScreeningState extends State<InitialScreening> {
             buildYesNoQuestion("Watering", hasWatering, (value) {
               hasWatering = value;
               if (!hasWatering) {
-                selectedEyeWatering = onsetWatering = durationWatering = hasWateringPain = dischargeType = null;
+                selectedEyeWatering = onsetWatering =
+                    durationWatering = hasWateringPain = dischargeType = null;
               }
             }),
 
             if (hasWatering) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Which Eye(s)", "eyeWatering", ["R", "L", "Both"], selectedEyeWatering),
+              buildRowToggleButton("Which Eye(s)", "eyeWatering",
+                  ["R", "L", "Both"], selectedEyeWatering),
               SizedBox(height: 10),
-              buildRowToggleButton("Onset", "onsetWatering", ["Sudden", "Gradual"], onsetWatering),
+              buildRowToggleButton("Onset", "onsetWatering",
+                  ["Sudden", "Gradual"], onsetWatering),
               SizedBox(height: 10),
-              buildRowToggleButton("Pain", "painWatering", ["Yes", "No"], hasWateringPain),
+              buildRowToggleButton(
+                  "Pain", "painWatering", ["Yes", "No"], hasWateringPain),
               SizedBox(height: 10),
-              buildRowToggleButton("Duration", "durationWatering", ["<1 Week", "1-4 Weeks", "4+ Weeks"], durationWatering),
+              buildRowToggleButton("Duration", "durationWatering",
+                  ["<1 Week", "1-4 Weeks", "4+ Weeks"], durationWatering),
               SizedBox(height: 10),
-              buildRowToggleButton("Discharge Type", "dischargeType", ["Clear", "Sticky"], dischargeType),
+              buildRowToggleButton("Discharge Type", "dischargeType",
+                  ["Clear", "Sticky"], dischargeType),
             ],
 
             SizedBox(height: 15),
@@ -242,9 +264,11 @@ class _InitialScreeningState extends State<InitialScreening> {
 
             if (hasItching) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Which Eye(s)", "itchingEye", ["R", "L", "Both"], itchingEye),
+              buildRowToggleButton(
+                  "Which Eye(s)", "itchingEye", ["R", "L", "Both"], itchingEye),
               SizedBox(height: 10),
-              buildRowToggleButton("Duration", "itchingDuration", ["<1 Week", "1-4 Weeks", "4+ Weeks"], itchingDuration),
+              buildRowToggleButton("Duration", "itchingDuration",
+                  ["<1 Week", "1-4 Weeks", "4+ Weeks"], itchingDuration),
             ],
 
             SizedBox(height: 15),
@@ -259,16 +283,20 @@ class _InitialScreeningState extends State<InitialScreening> {
 
             if (hasPain) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Which Eye(s)", "painEye", ["R", "L", "Both"], painEye),
+              buildRowToggleButton(
+                  "Which Eye(s)", "painEye", ["R", "L", "Both"], painEye),
               SizedBox(height: 10),
-              buildRowToggleButton("Onset", "painOnset", ["Sudden", "Gradual"], painOnset),
+              buildRowToggleButton(
+                  "Onset", "painOnset", ["Sudden", "Gradual"], painOnset),
               SizedBox(height: 10),
-              buildRowToggleButton("Duration", "painDuration", ["<1 Week", "1-4 Weeks", "4+ Weeks"], painDuration),
+              buildRowToggleButton("Duration", "painDuration",
+                  ["<1 Week", "1-4 Weeks", "4+ Weeks"], painDuration),
             ],
             SizedBox(height: 20),
 
-            Text("Systemic History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            
+            Text("Systemic History",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
             buildYesNoQuestion("Hypertension", HTN, (value) {
               HTN = value;
             }),
@@ -284,7 +312,8 @@ class _InitialScreeningState extends State<InitialScreening> {
             }),
             SizedBox(height: 20),
 
-            Text("Allergy History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Allergy History",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
 
             buildYesNoQuestion("Allergy to Eye Drops", allergyDrop, (value) {
               allergyDrop = value;
@@ -296,12 +325,14 @@ class _InitialScreeningState extends State<InitialScreening> {
             }),
             SizedBox(height: 15),
 
-            buildYesNoQuestion("Allergy to Injections", allergyInjection, (value) {
+            buildYesNoQuestion("Allergy to Injections", allergyInjection,
+                (value) {
               allergyInjection = value;
             }),
             SizedBox(height: 20),
 
-            Text("Contact Lenses History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Contact Lenses History",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
 
             buildYesNoQuestion("Wears Contact Lenses", contactLenses, (value) {
               contactLenses = value;
@@ -313,9 +344,11 @@ class _InitialScreeningState extends State<InitialScreening> {
 
             if (contactLenses) ...[
               SizedBox(height: 10),
-              buildRowToggleButton("Duration of Use", "contactLensesDuration", ["<1 Year", "1-5 Years", "5+ Years"], contactLensesDuration),
+              buildRowToggleButton("Duration of Use", "contactLensesDuration",
+                  ["<1 Year", "1-5 Years", "5+ Years"], contactLensesDuration),
               SizedBox(height: 10),
-              buildRowToggleButton("Frequency of Use", "contactLensesFrequency", ["Daily", "Weekly", "Monthly"], contactLensesFrequency),
+              buildRowToggleButton("Frequency of Use", "contactLensesFrequency",
+                  ["Daily", "Weekly", "Monthly"], contactLensesFrequency),
             ],
 
             ElevatedButton(
@@ -325,7 +358,6 @@ class _InitialScreeningState extends State<InitialScreening> {
               child: Text('Submit'),
             ),
           ],
-
         ),
       ),
     );

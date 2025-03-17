@@ -12,8 +12,7 @@ dependencies:
   image_picker: ^1.0.7
   image_picker_for_web: any
   http: ^1.1.0
-
-  http: any
+  google_fonts: ^6.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

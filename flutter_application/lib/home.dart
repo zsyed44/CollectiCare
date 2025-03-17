@@ -3,7 +3,10 @@ import 'login.dart';
 import 'register.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+    final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const Home({super.key, required this.toggleTheme, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +16,12 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           title: Text('WELCOME'),
           automaticallyImplyLeading: false, // Hide back arrow in AppBar
+          actions: [
+          IconButton(
+            icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode, color: isDarkMode ? Colors.white : Colors.black),
+            onPressed: toggleTheme,
+          ),
+        ],
         ),
         body: Center(
           //creating 2 buttons for login and register

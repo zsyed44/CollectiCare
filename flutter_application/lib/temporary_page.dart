@@ -4,6 +4,11 @@ import 'home.dart';
 String selectedCity = "";
 
 class TempPage extends StatelessWidget {
+    final VoidCallback toggleTheme;
+  final bool isDarkMode;
+
+  const TempPage({super.key, required this.toggleTheme, required this.isDarkMode});
+  
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -12,6 +17,12 @@ class TempPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('Login Page'),
           automaticallyImplyLeading: false, // Remove back arrow
+          actions: [
+          IconButton(
+            icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode, color: isDarkMode ? Colors.white : Colors.black),
+            onPressed: toggleTheme,
+          ),
+        ],
         ),
         body: Center(
           child: Column(
@@ -22,7 +33,7 @@ class TempPage extends StatelessWidget {
                   selectedCity = "London";
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode)),
                   );
                 },
                 child: Text("Login to London"),
@@ -33,7 +44,7 @@ class TempPage extends StatelessWidget {
                   selectedCity = "Montreal";
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode)),
                   );
                 },
                 child: Text("Login to Montreal"),
@@ -44,7 +55,7 @@ class TempPage extends StatelessWidget {
                   selectedCity = "Toronto";
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode)),
                   );
                 },
                 child: Text("Login to Toronto"),
