@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
 import 'temporary_page.dart';
 import 'package:flutter_application/dashboard.dart';
+import 'admin_dashboard.dart';
 
 void main() {
   runApp(const MainApp());
@@ -33,6 +34,7 @@ class _MainAppState extends State<MainApp> {
 
       initialRoute: '/temp',
       routes: {
+        '/admin-dashboard': (context) => AdminPage(),
         '/': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
         '/home': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
         '/temp': (context) => TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
@@ -41,7 +43,6 @@ class _MainAppState extends State<MainApp> {
   }
 }
 
-// 🔹 Dynamic Theme Configuration
 ThemeData getThemeData(bool isDarkMode) {
   return ThemeData(
     brightness: isDarkMode ? Brightness.dark : Brightness.light,
@@ -70,7 +71,6 @@ ThemeData getThemeData(bool isDarkMode) {
   );
 }
 
-// 📝 Global Input Field Styling (Ensures Readability in Both Modes)
 InputDecorationTheme getGlobalInputTheme(bool isDarkMode) {
   return InputDecorationTheme(
     filled: true,

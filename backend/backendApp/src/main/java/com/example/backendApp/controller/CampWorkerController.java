@@ -26,7 +26,7 @@ public class CampWorkerController {
     @PostMapping
     public String addCampWorker(@RequestBody CampWorker worker) {
         campWorkerRepository.saveCampWorker(worker);
-        return "Camp worker added successfully!";
+        return "{\"message\": \"Camp worker added successfully!\"}";
     }
 
     //  LINK CampWorker to Camp (Graph Edge)
