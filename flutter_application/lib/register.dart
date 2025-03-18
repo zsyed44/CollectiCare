@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'profile_registration.dart';
 import 'services/api_service.dart';
+import 'package:camera/camera.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -20,7 +21,7 @@ class _RegistrationState extends State<Registration> {
 
   Future<void> pickImage() async {
     if (!_isValidID) return; // Ensure button can't be clicked when disabled
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
 
@@ -28,9 +29,11 @@ class _RegistrationState extends State<Registration> {
 
       // Automatically navigate to profile registration page after photo upload
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)));
-      
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProfileRegistration(userId: _idController.text)));
+
       setState(() {
         _imageBytes = bytes;
       });
@@ -39,14 +42,16 @@ class _RegistrationState extends State<Registration> {
 
   void _validateID(String value) {
     setState(() {
-      _isValidID = RegExp(r'^\d{12}$').hasMatch(value); // Checks for exactly 12 digits
+      _isValidID =
+          RegExp(r'^\d{12}$').hasMatch(value); // Checks for exactly 12 digits
     });
   }
 
-  Future<void> _uploadPhoto() async { // Needs to be altered to follow the new API
+  Future<void> _uploadPhoto() async {
+    // Needs to be altered to follow the new API
     if (!_isValidID) return;
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
       setState(() {
@@ -54,15 +59,15 @@ class _RegistrationState extends State<Registration> {
       });
 
       try {
-        final response = await ApiService.post('auth/register/photo', {
-          'id': _idController.text,
-          'photo': base64Encode(_imageBytes!)
-        });
+        final response = await ApiService.post('auth/register/photo',
+            {'id': _idController.text, 'photo': base64Encode(_imageBytes!)});
 
         if (response['success']) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProfileRegistration(userId: _idController.text)),
+            MaterialPageRoute(
+                builder: (context) =>
+                    ProfileRegistration(userId: _idController.text)),
           );
         }
       } catch (e) {
@@ -86,19 +91,21 @@ class _RegistrationState extends State<Registration> {
               controller: _idController,
               decoration: InputDecoration(hintText: 'Enter 12-digit ID Number'),
               keyboardType: TextInputType.number,
-              onChanged: _validateID, // Call validation function on input change
+              onChanged:
+                  _validateID, // Call validation function on input change
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _isValidID ? pickImage : null, // Disable button if invalid
-              child: Text('Upload Photo to Register Patient'),
+              onPressed:
+                  _isValidID ? pickImage : null, // Disable button if invalid
+              child: Text('Capture Photo to Register Patient'),
             ),
             if (_imageBytes != null)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.memory(_imageBytes!, height: 100),
               ),
-            
+
             // SizedBox(height: 20),
             // ElevatedButton(
             //   onPressed: () {
@@ -109,7 +116,6 @@ class _RegistrationState extends State<Registration> {
             //   },
             //   child: Text('Register'),
             // ),
-
           ],
         ),
       ),

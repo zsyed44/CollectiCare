@@ -33,15 +33,15 @@ class _LoginState extends State<Login> {
       print(response);
 
       name = response["Name"];
-      dob = response["DOB"].split("T")[0]; // The split is to remove the time component from the DOB
+      dob = response["DOB"].split(
+          "T")[0]; // The split is to remove the time component from the DOB
       eyeStatus = response["Eye Status"];
       age = DateTime.now().year - int.parse(dob.substring(0, 4));
-      print ("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
+      print("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
     } catch (e) {
       print("Error: $e");
     }
   }
-
 
   Future<void> login() async {
     if (_imageData == null) return;
@@ -53,14 +53,19 @@ class _LoginState extends State<Login> {
       final response = await ApiService.get('patient/$id/$thisCity');
 
       if (response != null && response['patientID'] != null) {
-
         await fetchAndSetValues(id);
-        print ("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
+        print("Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age");
 
         await Future.delayed(Duration(seconds: 3)); // Simulate login delay
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => PatientDashboard(patientID: id, name: name, dob: dob, eyeStatus: eyeStatus, age: age)),
+          MaterialPageRoute(
+              builder: (context) => PatientDashboard(
+                  patientID: id,
+                  name: name,
+                  dob: dob,
+                  eyeStatus: eyeStatus,
+                  age: age)),
         );
       } else {
         // If the patient is not found
@@ -78,8 +83,8 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes(); // Convert image to bytes
       setState(() {
@@ -98,7 +103,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('LOGIN')),
@@ -116,9 +121,10 @@ class _LoginState extends State<Login> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isLoggingIn ? null : pickImage,
-              child: Text(_isLoggingIn ? 'Logging in...' : 'Upload Photo to Login'),
+              child: Text(
+                  _isLoggingIn ? 'Logging in...' : 'Upload Photo to Login'),
             ),
-            if (_imageData != null) 
+            if (_imageData != null)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.memory(_imageData!, height: 100),
