@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'services/api_service.dart';
+import 'analysis.dart';
 
 class CampWorker {
   final String workerID;
@@ -149,6 +150,15 @@ Future<void> addCampWorker(String workerID, String name, String role) async {
       appBar: AppBar(
         title: Text("Admin - Camp Workers"),
         actions: [
+          IconButton(
+            icon: Icon(Icons.bar_chart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AnalysisPage()),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: showAddWorkerDialog,
