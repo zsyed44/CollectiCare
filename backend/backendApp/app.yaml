@@ -1,0 +1,20 @@
+runtime: java17
+env: standard
+
+instance_class: F2
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
+  target_cpu_utilization: 0.65
+
+env_variables:
+  ORIENTDB_HOST: "34.28.186.106"
+  ORIENTDB_DB: "MedicalDB"
+  ORIENTDB_USER: "root"
+  ORIENTDB_PASSWORD: "Obaid"
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
