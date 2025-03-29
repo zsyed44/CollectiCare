@@ -10,9 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DBConfig {
     private static final String DB_NAME = "MedicalService";
-    private static final String DB_USER = "root"
+    private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "Obaid";
     private static final String ORIENTDB_HOST = "remote:10.0.0.6";
+// remote:34.28.186.106:2424
+    //	34.28.186.106
+//    private static final String DB_NAME = System.getenv("ORIENTDB_DB");
+//    private static final String DB_USER = System.getenv("ORIENTDB_USER");
+//    private static final String DB_PASSWORD = System.getenv("ORIENTDB_PASSWORD");
+//    private static final String ORIENTDB_HOST = "remote:" + System.getenv("ORIENTDB_HOST") + ":2424";
+
 
     private OrientDB orientDB;
     private ODatabaseSession dbSession;

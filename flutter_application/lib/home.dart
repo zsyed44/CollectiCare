@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'register.dart';
+import 'admin_dashboard.dart';
 
 class Home extends StatelessWidget {
     final VoidCallback toggleTheme;
@@ -16,6 +17,15 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           title: Text('WELCOME'),
           automaticallyImplyLeading: false, // Hide back arrow in AppBar
+          leading: IconButton(
+            icon: Icon(Icons.admin_panel_settings, color: Colors.white, size: 40),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminPage()),
+              );
+            },
+          ),
           actions: [
           IconButton(
             icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode, color: isDarkMode ? Colors.white : Colors.black),
