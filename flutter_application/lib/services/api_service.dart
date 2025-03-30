@@ -9,24 +9,24 @@ class ApiService {
     'Access-Control-Allow-Origin': '*'
   };
 
-
   // GET request
   static Future<dynamic> get(String endpoint) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: headers
-    );
+    final response =
+        await http.get(Uri.parse('$baseUrl/$endpoint'), headers: headers);
     return json.decode(response.body);
   }
 
-
   // POST request
   static Future<dynamic> post(String endpoint, dynamic data) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: headers,
-      body: json.encode(data)
-    );
+    final response = await http.post(Uri.parse('$baseUrl/$endpoint'),
+        headers: headers, body: json.encode(data));
+    return json.decode(response.body);
+  }
+
+  // PUT request
+  static Future<dynamic> put(String endpoint, dynamic data) async {
+    final response = await http.put(Uri.parse('$baseUrl/$endpoint'),
+        headers: headers, body: json.encode(data));
     return json.decode(response.body);
   }
 }
