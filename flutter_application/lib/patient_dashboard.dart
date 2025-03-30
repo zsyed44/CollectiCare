@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/dashboard.dart';
 import 'services/api_service.dart';
-
+import 'test2.dart';
 
 class PatientDashboard extends StatelessWidget {
-
   final String imagePath = "assets/profile.jpg"; // Use a local asset image
 
 //   PatientDashboard({super.key}); // Eye status example
@@ -13,8 +12,12 @@ class PatientDashboard extends StatelessWidget {
   String dob;
   String eyeStatus;
   int age;
-  PatientDashboard({required this.patientID, required this.name, required this.dob, required this.eyeStatus, required this.age});
-
+  PatientDashboard(
+      {required this.patientID,
+      required this.name,
+      required this.dob,
+      required this.eyeStatus,
+      required this.age});
 
   // TEMPORARY PLACEHOLDER VALUES
   // final String name = "John Doe";
@@ -56,7 +59,8 @@ class PatientDashboard extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-              crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Center horizontally
               children: <Widget>[
                 // Profile Picture
                 CircleAvatar(
@@ -103,9 +107,13 @@ class PatientDashboard extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Dashboard()),
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Dashboard(patientID: patientID)));
+                    // MaterialPageRoute(
+                    //     builder: (context) =>
+                    //         ImageEyeTest(patientID: patientID)));
                   },
                   child: Text('Start Test'),
                 ),

@@ -7,7 +7,10 @@ import 'test5.dart';
 import 'test1b.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  // const Dashboard({super.key});
+
+  String patientID;
+  Dashboard({required this.patientID});
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -80,7 +83,8 @@ class _DashboardState extends State<Dashboard> {
                     final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ImageEyeTest()));
+                            builder: (context) =>
+                                ImageEyeTest(patientID: widget.patientID)));
                     if (result == true) updateTestStatus(2);
                   },
                   style: ElevatedButton.styleFrom(
