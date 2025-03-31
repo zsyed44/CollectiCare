@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'services/api_service.dart';
 
 class AnalysisPage extends StatefulWidget {
-  const AnalysisPage({Key? key}) : super(key: key);
+  const AnalysisPage({super.key});
 
   @override
   _AnalysisPageState createState() => _AnalysisPageState();
@@ -10,25 +11,33 @@ class AnalysisPage extends StatefulWidget {
 
 class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final Random _random = Random();
   
-  // Mock data for different analysis types
-  final List<Map<String, dynamic>> _demographicData = [];
-  final List<Map<String, dynamic>> _conditionData = [];
-  final List<Map<String, dynamic>> _timeSeriesData = [];
-  final List<Map<String, dynamic>> _correlationData = [];
-  
-  // Filter values
+  // Selected filter values
   String _selectedAgeGroup = 'All';
   String _selectedGender = 'All';
   String _selectedRegion = 'All';
   String _selectedCondition = 'All';
   
+  // Data states
+  bool _isLoading = true;
+  String? _errorMessage;
+  
+  // Data containers
+  Map<String, dynamic> _summaryData = {};
+  Map<String, dynamic> _ageDistributionData = {};
+  Map<String, dynamic> _conditionPrevalenceData = {};
+  Map<String, dynamic> _geographicalData = {};
+  Map<String, dynamic> _correlationData = {};
+  Map<String, dynamic> _timeSeriesData = {};
+  Map<String, dynamic> _clusterData = {};
+  Map<String, dynamic> _comparativeData = {};
+  Map<String, dynamic> _riskFactorData = {};
+  
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 6, vsync: this);
-    _generateMockData();
+    _loadDashboardData();
   }
   
   @override
@@ -37,62 +46,76 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
     super.dispose();
   }
   
-  // Generate random mock data for demonstration
-  void _generateMockData() {
-    // Age groups
-    final ageGroups = ['0-18', '19-40', '41-60', '61+'];
-    // Genders
-    final genders = ['Male', 'Female'];
-    // Regions (mockup)
-    final regions = ['London', 'Montreal', 'Toronto'];
-    // Eye conditions
-    final conditions = ['Myopia', 'Hyperopia', 'Astigmatism', 'Cataracts', 'Glaucoma'];
-    // Systemic conditions
-    final systemicConditions = ['Diabetes', 'Hypertension', 'None'];
+  // Load initial dashboard data
+  Future<void> _loadDashboardData() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     
-    // Generate demographic data
-    for (var i = 0; i < 100; i++) {
-      _demographicData.add({
-        'id': i,
-        'age': 10 + _random.nextInt(80),
-        'ageGroup': ageGroups[_random.nextInt(ageGroups.length)],
-        'gender': genders[_random.nextInt(genders.length)],
-        'region': regions[_random.nextInt(regions.length)],
+    try {
+      // Load summary statistics first (most important)
+      _summaryData = await ApiService.getAnalysisSummary();
+      
+      // Load other data in parallel
+      await Future.wait([
+        ApiService.getAgeDistribution().then((data) => _ageDistributionData = data),
+        ApiService.getConditionPrevalence('gender').then((data) => _conditionPrevalenceData = data),
+        ApiService.getGeographicalDistribution().then((data) => _geographicalData = data),
+        ApiService.getCorrelationAnalysis().then((data) => _correlationData = data),
+        ApiService.getTimeSeriesAnalysis().then((data) => _timeSeriesData = data),
+        ApiService.getClusterAnalysis('symptoms').then((data) => _clusterData = data),
+        ApiService.getComparativeAnalysis('demographic').then((data) => _comparativeData = data),
+        ApiService.getRiskFactors('Glaucoma').then((data) => _riskFactorData = data),
+      ]);
+      
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Failed to load dashboard data: $e";
       });
     }
+  }
+  
+  // Apply filters and refresh data
+  Future<void> _applyFilters() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     
-    // Generate condition data
-    for (var i = 0; i < 100; i++) {
-      _conditionData.add({
-        'id': i,
-        'condition': conditions[_random.nextInt(conditions.length)],
-        'severity': _random.nextInt(5) + 1,
-        'systemicCondition': systemicConditions[_random.nextInt(systemicConditions.length)],
-        'treatment': _random.nextBool() ? 'Yes' : 'No',
+    try {
+      // Create filter map
+      Map<String, dynamic> filters = {
+        'ageGroup': _selectedAgeGroup,
+        'gender': _selectedGender,
+        'region': _selectedRegion,
+        'condition': _selectedCondition
+      };
+      
+      // Get filtered data
+      final filteredData = await ApiService.getFilteredData(filters);
+      
+      // Update relevant data containers
+      if (filteredData.containsKey('patientCount')) {
+        _summaryData['totalPatients'] = filteredData['patientCount'];
+      }
+      
+      if (filteredData.containsKey('conditionDistribution')) {
+        _conditionPrevalenceData['filteredDistribution'] = filteredData['conditionDistribution'];
+      }
+      
+      setState(() {
+        _isLoading = false;
       });
-    }
-    
-    // Generate time series data (for the last 12 months)
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    for (var condition in conditions) {
-      for (var i = 0; i < months.length; i++) {
-        _timeSeriesData.add({
-          'month': months[i],
-          'condition': condition,
-          'cases': _random.nextInt(50) + 10,
-        });
-      }
-    }
-    
-    // Generate correlation data
-    for (var condition in conditions) {
-      for (var systemic in systemicConditions) {
-        _correlationData.add({
-          'eyeCondition': condition,
-          'systemicCondition': systemic,
-          'correlation': _random.nextDouble() * 0.8,
-        });
-      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Failed to apply filters: $e";
+      });
     }
   }
   
@@ -177,15 +200,11 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
           ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
-            onPressed: () {
-              // In a real app, this would refresh the data based on filters
-              setState(() {
-                // Regenerate mock data for demonstration
-                _generateMockData();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            label: const Text('Apply Filters'),
+            onPressed: _isLoading ? null : _applyFilters,
+            icon: _isLoading 
+                ? Container(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.refresh),
+            label: Text(_isLoading ? 'Loading...' : 'Apply Filters'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue[700],
               foregroundColor: Colors.white,
@@ -311,11 +330,71 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
           const SizedBox(height: 16),
           Expanded(
             child: Center(
-              child: Icon(
-                Icons.bar_chart,
-                size: 80,
-                color: Colors.blue[700],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.bar_chart,
+                    size: 80,
+                    color: Colors.blue[700],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Data visualization will appear here",
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Connect to backend API to see real data",
+                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                  ),
+                ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Loading indicator
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(color: Colors.blue[700]),
+          const SizedBox(height: 16),
+          Text(
+            "Loading data...",
+            style: TextStyle(color: Colors.white70),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Error display
+  Widget _buildErrorDisplay() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, color: Colors.red[400], size: 48),
+          const SizedBox(height: 16),
+          Text(
+            _errorMessage ?? "An error occurred",
+            style: TextStyle(color: Colors.white70),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: _loadDashboardData,
+            icon: Icon(Icons.refresh),
+            label: Text("Try Again"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[700],
+              foregroundColor: Colors.white,
             ),
           ),
         ],
@@ -325,6 +404,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Descriptive Statistics Tab
   Widget _buildDescriptiveTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -349,25 +436,25 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
             children: [
               _buildStatCard(
                 'Total Patients',
-                '1,245',
+                (_summaryData['totalPatients'] ?? 0).toString(),
                 Colors.blue,
                 Icons.people,
               ),
               _buildStatCard(
                 'Average Age',
-                '42.5',
+                '${_summaryData['averageAge'] ?? 0}',
                 Colors.amber,
                 Icons.calendar_today,
               ),
               _buildStatCard(
                 'Common Condition',
-                'Myopia',
+                _summaryData['commonEyeCondition'] ?? 'Unknown',
                 Colors.green,
                 Icons.visibility,
               ),
               _buildStatCard(
                 'Diabetic Patients',
-                '23%',
+                '${_summaryData.containsKey('systemicConditions') ? _summaryData['systemicConditions']['diabetes'] : 0}%',
                 Colors.red,
                 Icons.bloodtype,
               ),
@@ -386,6 +473,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Correlation Analysis Tab
   Widget _buildCorrelationTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -412,6 +507,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Time Series Analysis Tab
   Widget _buildTimeSeriesTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -438,6 +541,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Cluster Analysis Tab
   Widget _buildClusterTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -462,6 +573,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Comparative Analysis Tab
   Widget _buildComparativeTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -488,6 +607,14 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
   
   // Multivariate Analysis Tab
   Widget _buildMultivariateTab() {
+    if (_isLoading) {
+      return _buildLoadingIndicator();
+    }
+    
+    if (_errorMessage != null) {
+      return _buildErrorDisplay();
+    }
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -588,12 +715,9 @@ class _AnalysisPageState extends State<AnalysisPage> with SingleTickerProviderSt
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[700],
-        child: const Icon(Icons.add),
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Create new analysis')),
-          );
-        },
+        child: const Icon(Icons.refresh),
+        onPressed: _loadDashboardData,
+        tooltip: 'Refresh Data',
       ),
     );
   }

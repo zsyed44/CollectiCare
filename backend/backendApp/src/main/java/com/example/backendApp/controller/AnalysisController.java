@@ -3,6 +3,8 @@ package com.example.backendApp.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.backendApp.repository.AnalysisRepository;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 //controller for handling data analysis endpoints used by the dashboard.
