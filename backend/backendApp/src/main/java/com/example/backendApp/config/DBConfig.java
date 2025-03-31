@@ -12,7 +12,7 @@ public class DBConfig {
     private static final String DB_NAME = "MedicalService";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "Obaid";
-    private static final String ORIENTDB_HOST = "remote:10.0.0.6";
+    private static final String ORIENTDB_HOST = "remote:localhost";
 // remote:34.28.186.106:2424
     //	34.28.186.106
 //    private static final String DB_NAME = System.getenv("ORIENTDB_DB");
