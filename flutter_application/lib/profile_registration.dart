@@ -53,7 +53,8 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
           'contactInfo': _phoneController.text, // temporary/default contact
           'consentForFacialRecognition': true, // temporary/default consent
           'phone': _phoneController.text,
-          'address': thisCity, // The city that the health camp is in
+          'address':
+              _addressController.text, // The city that the health camp is in
           'eyeStatus': 'Normal', // temporary/default eye status
           'gender': _selectedGender // include gender in the submission
         });
