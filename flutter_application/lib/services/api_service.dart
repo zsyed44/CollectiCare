@@ -39,6 +39,13 @@ class ApiService {
       return _getMockData(endpoint);
     }
   }
+  
+  // PUT request
+  static Future<dynamic> put(String endpoint, dynamic data) async {
+    final response = await http.put(Uri.parse('$baseUrl/$endpoint'),
+        headers: headers, body: json.encode(data));
+    return json.decode(response.body);
+  }
 
   // Handle response
   static dynamic _handleResponse(http.Response response) {
@@ -65,6 +72,23 @@ class ApiService {
   static Future<Map<String, dynamic>> getGeographicalDistribution() async {
     return await get('analysis/geographical-distribution');
   }
+
+//     final response = await http.post(Uri.parse('$baseUrl/$endpoint'),
+//         headers: headers, body: json.encode(data));
+//     return json.decode(response.body);
+//   }
+
+  
+}
+
+  // // Handle response
+  // static dynamic _handleResponse(http.Response response) {
+  //   if (response.statusCode == 200) {
+  //     return json.decode(response.body);
+  //   } else {
+  //     throw Exception('Failed: ${response.statusCode}');
+  //   }
+
 
   static Future<Map<String, dynamic>> getCorrelationAnalysis() async {
     return await get('analysis/correlation-analysis');
