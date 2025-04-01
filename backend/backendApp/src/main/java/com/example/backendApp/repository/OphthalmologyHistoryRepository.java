@@ -40,6 +40,7 @@ public class OphthalmologyHistoryRepository {
             doc.field("wateringDuration", history.getWateringDuration());
             doc.field("wateringDischargeType", history.getWateringDischargeType());
             doc.field("itching", history.isItching());
+            doc.field("itchingDuration", history.IsItchingDuration());
             doc.field("itchingEye", history.getItchingEye());
             doc.field("pain", history.isPain());
             doc.field("painEye", history.getPainEye());
@@ -82,6 +83,7 @@ public class OphthalmologyHistoryRepository {
                                 doc.field("wateringDuration", String.class),
                                 doc.field("wateringDischargeType", String.class),
                                 doc.field("itching", Boolean.class),
+                                doc.field("itchingDuration", String.class),
                                 doc.field("itchingEye", String.class),
                                 doc.field("pain", Boolean.class),
                                 doc.field("painEye", String.class),
