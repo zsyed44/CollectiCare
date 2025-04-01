@@ -92,6 +92,20 @@ class _InitialScreeningState extends State<InitialScreening> {
         SnackBar(content: Text('Submission failed: $e')),
       );
     }
+    try {
+      final response = await ApiService.post("contactlense/add", {
+        "patientID": widget.patientID,
+        "frequency": contactLensesFrequency,
+        "usesContactLenses": contactLenses,
+        "yearsOfUse": contactLensesDuration
+      });
+
+      print('API response: $response');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Submission failed: $e')),
+      );
+    }
   }
 
   void updateState(String category, String value) {
