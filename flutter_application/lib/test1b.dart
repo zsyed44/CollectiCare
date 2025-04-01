@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/services/api_service.dart';
 
 class InitialScreening extends StatefulWidget {
+  String patientID;
+  InitialScreening({required this.patientID});
+
   @override
   _InitialScreeningState createState() => _InitialScreeningState();
 }
@@ -48,7 +52,7 @@ class _InitialScreeningState extends State<InitialScreening> {
   //Allergy History
   bool allergyDrop = false;
   bool allergyTablet = false;
-  bool allergyInjection = false;
+  bool seasonalAllergies = false;
 
   //Contact Lenses History
   bool contactLenses = false;
@@ -58,6 +62,37 @@ class _InitialScreeningState extends State<InitialScreening> {
   //Eye Surgical History
   bool retinaLaser = false;
   bool cataractSurgery = false;
+
+  Future<void> _submitTest() async {
+    try {
+      final response = await ApiService.post("systemic/add", {
+        "patientID": widget.patientID,
+        "HTN": HTN,
+        "DM": DM,
+        "heartDisease": heartDisease
+      });
+
+      print('API response: $response');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Submission failed: $e')),
+      );
+    }
+    try {
+      final response = await ApiService.post("allergy/add", {
+        "patientID": widget.patientID,
+        "allergyDrops": allergyDrop,
+        "allergyTablets": allergyTablet,
+        "seasonalAllergies": seasonalAllergies
+      });
+
+      print('API response: $response');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Submission failed: $e')),
+      );
+    }
+  }
 
   void updateState(String category, String value) {
     setState(() {
@@ -325,9 +360,9 @@ class _InitialScreeningState extends State<InitialScreening> {
             }),
             SizedBox(height: 15),
 
-            buildYesNoQuestion("Allergy to Injections", allergyInjection,
+            buildYesNoQuestion("Seasonal Allergies", seasonalAllergies,
                 (value) {
-              allergyInjection = value;
+              seasonalAllergies = value;
             }),
             SizedBox(height: 20),
 
@@ -354,6 +389,7 @@ class _InitialScreeningState extends State<InitialScreening> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, true); // Returns true when submitted
+                _submitTest();
               },
               child: Text('Submit'),
             ),

@@ -68,7 +68,8 @@ class _DashboardState extends State<Dashboard> {
                     final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => InitialScreening()));
+                            builder: (context) =>
+                                InitialScreening(patientID: widget.patientID)));
                     if (result == true) updateTestStatus(1);
                   },
                   style: ElevatedButton.styleFrom(

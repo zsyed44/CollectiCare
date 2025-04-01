@@ -21,7 +21,7 @@ public class AllergyHistoryRepository {
     }
 
     // Save Allergy History (Node)
-    public void saveAllergyHistory(AllergyHistory history) {
+    public boolean saveAllergyHistory(AllergyHistory history) {
         try {
             ensureActiveSession();
             ODocument doc = new ODocument("AllergyHistory");
@@ -30,9 +30,11 @@ public class AllergyHistoryRepository {
             doc.field("allergyTablets", history.isAllergyTablets());
             doc.field("seasonalAllergies", history.isSeasonalAllergies());
             doc.save();
+            return true; // Return success
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("❌ Error adding history: " + e.getMessage());
         }
+        return false;
     }
 
     // Get All Allergy History (Nodes)
