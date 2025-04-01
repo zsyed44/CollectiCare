@@ -28,7 +28,7 @@ public class ContactLensesRepository {
             doc.field("patientID", history.getPatientID());
             doc.field("frequency", history.isFrequency());
             doc.field("usesContactLenses", history.isUsesContactLenses());
-            doc.field("yearsOfUse", history.isyearsOfUse());
+            doc.field("yearsOfUse", history.isYearsOfUse());
             doc.save();
             return true; // Return success
         } catch (Exception e) {

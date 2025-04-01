@@ -25,7 +25,7 @@ public class ContactLensesHistory {
         return usesContactLenses;
     }
 
-    public Integer isyearsOfUse() {
+    public Integer isYearsOfUse() {
         return yearsOfUse;
     }
 

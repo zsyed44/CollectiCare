@@ -19,6 +19,7 @@ public class OphthalmologyHistory {
     private String wateringDischargeType;
     private boolean itching;
     private String itchingEye;
+    private String itchingDuration;
     private boolean pain;
     private String painEye;
     private String painOnset;
@@ -30,7 +31,7 @@ public class OphthalmologyHistory {
             String rednessOnset, boolean rednessPain, String rednessDuration, String wateringEye,
             String wateringOnset, boolean wateringPain, String wateringDuration, String wateringDischargeType,
             boolean itching, String itchingEye, boolean pain, String painEye, String painOnset,
-            String painDuration) {
+            String painDuration, String itchingDuration) {
         this.patientID = patientID;
         this.lossOfVision = lossOfVision;
         this.lossOfVisionEye = lossOfVisionEye;
@@ -48,6 +49,7 @@ public class OphthalmologyHistory {
         this.wateringDuration = wateringDuration;
         this.wateringDischargeType = wateringDischargeType;
         this.itching = itching;
+        this.itchingDuration = itchingDuration;
         this.itchingEye = itchingEye;
         this.pain = pain;
         this.painEye = painEye;
@@ -122,6 +124,8 @@ public class OphthalmologyHistory {
     public boolean isItching() {
         return itching;
     }
+
+    public String IsItchingDuration () { return itchingDuration; }
 
     public String getItchingEye() {
         return itchingEye;
@@ -210,6 +214,8 @@ public class OphthalmologyHistory {
     public void setItching(boolean itching) {
         this.itching = itching;
     }
+
+    public void setItchingDuration(String itchingDuration) { this.itchingDuration = itchingDuration; }
 
     public void setItchingEye(String itchingEye) {
         this.itchingEye = itchingEye;
