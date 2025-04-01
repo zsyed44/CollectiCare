@@ -117,61 +117,62 @@ public class PatientRepository {
             doc.field("Address", patient.getAddress());
             doc.field("EyeStatus", patient.getEyeStatus());
             doc.field("Gender", patient.getGender());
+            doc.field("ImageEmbedding", patient.getImageEmbedding());
 
             doc.save(); // Save the document
             dbSession.commit(); // Commit transaction
 
             return true; // Return success
-        } catch (Exception e) {
-            System.err.println("❌ Error adding patient: " + e.getMessage());
-        }
-        return false;
-    }
+          } catch (Exception e) {
+              System.err.println("❌ Error adding patient: " + e.getMessage());
+          }
+          return false;
+      }
 
-    /**
-     * Delete a patient by ID.
-     */
-    public boolean deletePatient(String patientID) {
-        try {
-            ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
-            dbSession.begin(); // Start transaction
-            int deletedRecords = dbSession.command("DELETE VERTEX Patient WHERE PatientID = ?", patientID).next()
-                    .getProperty("count");
-            dbSession.commit(); // Commit transaction
+      /**
+       * Delete a patient by ID.
+       */
+      public boolean deletePatient(String patientID) {
+          try {
+              ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
+              dbSession.begin(); // Start transaction
+              int deletedRecords = dbSession.command("DELETE VERTEX Patient WHERE PatientID = ?", patientID).next()
+                      .getProperty("count");
+              dbSession.commit(); // Commit transaction
 
-            return deletedRecords > 0; // Return true if any record was deleted
-        } catch (Exception e) {
-            System.err.println("❌ Error deleting patient: " + e.getMessage());
-        }
-        return false;
-    }
+              return deletedRecords > 0; // Return true if any record was deleted
+          } catch (Exception e) {
+              System.err.println("❌ Error deleting patient: " + e.getMessage());
+          }
+          return false;
+      }
 
-    public boolean updatePatientField(String patientID, String fieldName, Object newValue) {
-        try {
-            ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
-            dbSession.begin(); // Start transaction
+      public boolean updatePatientField(String patientID, String fieldName, Object newValue) {
+          try {
+              ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
+              dbSession.begin(); // Start transaction
 
-            var resultSet = dbSession.query("SELECT FROM Patient WHERE PatientID = ?", patientID);
-            System.out.println("Patietn Found" + patientID);
+              var resultSet = dbSession.query("SELECT FROM Patient WHERE PatientID = ?", patientID);
+              System.out.println("Patietn Found" + patientID);
 
-            if (resultSet.hasNext()) {
-                var result = resultSet.next();
-                if (result.getRecord().isPresent()) {
-                    ODocument doc = (ODocument) result.getRecord().get();
+              if (resultSet.hasNext()) {
+                  var result = resultSet.next();
+                  if (result.getRecord().isPresent()) {
+                      ODocument doc = (ODocument) result.getRecord().get();
 
-                    // Update only the specified field
-                    doc.field(fieldName, newValue);
-                    doc.save(); // Save updated document
-                    dbSession.commit(); // Commit transaction
+                      // Update only the specified field
+                      doc.field(fieldName, newValue);
+                      doc.save(); // Save updated document
+                      dbSession.commit(); // Commit transaction
 
-                    return true; // Successfully updated
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("❌ Error updating patient field: " + e.getMessage());
-        }
-        return false; // Update failed
-    }
+                      return true; // Successfully updated
+                  }
+              }
+          } catch (Exception e) {
+              System.err.println("❌ Error updating patient field: " + e.getMessage());
+          }
+          return false; // Update failed
+      }
 
     /**
      * Maps an `ODocument` to a `Patient` object.
@@ -188,6 +189,8 @@ public class PatientRepository {
                 doc.field("Phone", String.class),
                 doc.field("Address", String.class),
                 doc.field("EyeStatus", String.class),
-                doc.field("Gender", String.class));
+                doc.field("Gender", String.class),
+                doc.field("ImageEmbedding", List.class)
+        );
     }
 }

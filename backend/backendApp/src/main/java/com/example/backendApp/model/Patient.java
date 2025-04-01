@@ -1,6 +1,7 @@
 package com.example.backendApp.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Patient {
 private String patientID;
@@ -14,8 +15,9 @@ private boolean consentForFacialRecognition;
 private String address;
 private String eyeStatus;
 private String gender;
+private List<Double> imageEmbedding;
 
-public Patient(String patientID, String name, Date dob, String gisLocation, String govtID, String contactInfo, boolean consentForFacialRecognition, String phone, String address, String eyeStatus, String gender) {
+public Patient(String patientID, String name, Date dob, String gisLocation, String govtID, String contactInfo, boolean consentForFacialRecognition, String phone, String address, String eyeStatus, String gender, List<Double> imageEmbedding) {
     this.patientID = patientID; //
     this.name = name; //
     this.dob = dob; //
@@ -28,6 +30,7 @@ public Patient(String patientID, String name, Date dob, String gisLocation, Stri
     this.address = address;
     this.eyeStatus = eyeStatus;
     this.gender = gender;
+    this.imageEmbedding = imageEmbedding;
 }
 
 // id, name, dob(YEAR MONTH DATE), campLocation, Phone
@@ -42,6 +45,7 @@ public String getPhone() { return phone; }
 public String getAddress() { return address; }
 public String getEyeStatus() { return eyeStatus; }
 public String getGender() { return gender; }
+public List<Double> getImageEmbedding() { return imageEmbedding; }
 
 
 public void setPatientID(String patientID) { this.patientID = patientID; }
@@ -55,4 +59,5 @@ public void setPhone(String phone) { this.phone = phone; }
 public void setAddress(String address) { this.address = address; }
 public void setEyeStatus(String eyeStatus) { this.eyeStatus = eyeStatus; }
 public void setGender(String gender) { this.gender = gender; }
+public void setImageEmbedding(List<Double> imageEmbedding) { this.imageEmbedding = imageEmbedding; }
 }

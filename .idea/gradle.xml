@@ -12,19 +12,14 @@
             <option value="$PROJECT_DIR$/backend/backendApp" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
       <GradleProjectSettings>
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-<!--               <build path="$PROJECT_DIR$/../../Flutter/flutter/packages/flutter_tools/gradle" name="gradle">
+              <build path="$PROJECT_DIR$/../../../../../flutter/packages/flutter_tools/gradle" name="gradle">
                 <projects>
-                  <project path="$PROJECT_DIR$/../../Flutter/flutter/packages/flutter_tools/gradle" /> -->
-              <build path="$USER_HOME$/development/flutter/packages/flutter_tools/gradle" name="gradle">
-                <projects>
-                  <project path="$USER_HOME$/development/flutter/packages/flutter_tools/gradle" />
-                  
+                  <project path="$PROJECT_DIR$/../../../../../flutter/packages/flutter_tools/gradle" />
                 </projects>
               </build>
             </builds>
@@ -35,21 +30,30 @@
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
-<!--             <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.24/android" />
-            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.12+20/android" />
-            <option value="$PROJECT_DIR$/../../Flutter/flutter/packages/flutter_tools/gradle" />
-            <option value="$PROJECT_DIR$/flutter_application/android" />
-            <option value="$PROJECT_DIR$/flutter_application/android/app" /> -->
-            
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.24/android" />
-            <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+20/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/camera_android_camerax-0.6.14+1/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.27/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_barcode_scanning-0.10.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_commons-0.6.1/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_digital_ink_recognition-0.10.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_entity_extraction-0.11.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_face_detection-0.9.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_face_mesh_detection-0.0.2/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_image_labeling-0.10.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_language_id-0.9.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_object_detection-0.11.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_pose_detection-0.10.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_selfie_segmentation-0.6.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_smart_reply-0.9.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_text_recognition-0.11.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_translation-0.9.0/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.12+22/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.16/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/tflite-1.1.2/android" />
             <option value="$PROJECT_DIR$/flutter_application/android" />
             <option value="$PROJECT_DIR$/flutter_application/android/app" />
-            <option value="$USER_HOME$/development/flutter/packages/flutter_tools/gradle" />
-
+            <option value="$PROJECT_DIR$/../../../../../flutter/packages/flutter_tools/gradle" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
