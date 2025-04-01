@@ -4,6 +4,7 @@ import 'home.dart';
 import 'temporary_page.dart';
 import 'package:flutter_application/dashboard.dart';
 import 'admin_dashboard.dart';
+import 'healthWorker_login.dart';
 
 void main() {
   runApp(const MainApp());
@@ -32,12 +33,13 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       theme: isDarkMode ? getThemeData(true) : getThemeData(false), // Apply dynamic theme
 
-      initialRoute: '/temp',
+      initialRoute: '/login',
       routes: {
         '/admin-dashboard': (context) => AdminPage(),
         '/': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
         '/home': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
         '/temp': (context) => TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/login': (context) => HealthWorkerLoginPage()
       },
     );
   }

@@ -29,6 +29,7 @@ public class CampWorkerRepository {
             doc.field("Name", worker.getName());
             doc.field("Role", worker.getRole());
             doc.field("Password", worker.getPassword());
+            doc.field("Location",worker.getLocation());
             doc.save();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,8 +53,9 @@ public class CampWorkerRepository {
                         String name = doc.field("Name", String.class);
                         String role = doc.field("Role", String.class);
                         String password = doc.field("Password", String.class);
+                        String location = doc.field("Location", String.class);
 
-                        workers.add(new CampWorker(workerID, name, role, password));
+                        workers.add(new CampWorker(workerID, name, role, password, location));
                     }
                 }
             }
@@ -61,6 +63,32 @@ public class CampWorkerRepository {
             e.printStackTrace();
         }
         return workers;
+    }
+
+    // ✅ Get a Camp Worker by WorkerID
+    public CampWorker getCampWorkerByWorkerID(String workerID) {
+        try {
+            ensureActiveSession();
+            var resultSet = dbSession.query("SELECT * FROM CampWorker WHERE WorkerID = ?", workerID);
+
+            if (resultSet.hasNext()) {
+                var result = resultSet.next();
+                if (result.getRecord().isPresent()) {
+                    ORecord record = result.getRecord().get();
+                    if (record instanceof ODocument doc) {
+                        String name = doc.field("Name", String.class);
+                        String role = doc.field("Role", String.class);
+                        String password = doc.field("Password", String.class);
+                        String location = doc.field("Location", String.class);
+
+                        return new CampWorker(workerID, name, role, password, location);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // ✅ Assign Camp Worker to a Camp (Graph Edge)
@@ -81,6 +109,21 @@ public class CampWorkerRepository {
         try {
             ensureActiveSession();
             dbSession.command("DELETE VERTEX CampWorker WHERE WorkerID = ?", workerID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateWorkerLocation(String workerID, String location) {
+        try {
+            ensureActiveSession();
+
+            // Update the worker's location using an update query
+            String query = String.format(
+                    "UPDATE CampWorker SET Location = '%s' WHERE WorkerID = '%s'", location, workerID);
+
+            // Execute the update command
+            dbSession.command(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
