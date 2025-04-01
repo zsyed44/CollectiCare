@@ -225,31 +225,31 @@ public class AnalysisRepositoryImpl implements AnalysisRepository {
         ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
         
         try {
-            if (demographic == null || demographic.equalsIgnoreCase("gender")) {
-                // Get condition prevalence by gender
-                OResultSet genderResult = dbSession.query(
-                    "SELECT p.Gender, p.EyeStatus, COUNT(*) as count " +
-                    "FROM Patient p " +
-                    "WHERE p.Gender IS NOT NULL AND p.EyeStatus IS NOT NULL " +
-                    "GROUP BY p.Gender, p.EyeStatus " +
-                    "ORDER BY p.Gender, count DESC");
+            // if (demographic == null || demographic.equalsIgnoreCase("gender")) {
+            //     // Get condition prevalence by gender
+            //     OResultSet genderResult = dbSession.query(
+            //         "SELECT p.Gender, p.EyeStatus, COUNT(*) as count " +
+            //         "FROM Patient p " +
+            //         "WHERE p.Gender IS NOT NULL AND p.EyeStatus IS NOT NULL " +
+            //         "GROUP BY p.Gender, p.EyeStatus " +
+            //         "ORDER BY p.Gender, count DESC");
                 
-                Map<String, Map<String, Integer>> genderConditions = new HashMap<>();
-                while (genderResult.hasNext()) {
-                    OResult result = genderResult.next();
-                    String gender = result.getProperty("Gender");
-                    String eyeStatus = result.getProperty("EyeStatus");
-                    Integer count = result.getProperty("count");
+            //     Map<String, Map<String, Integer>> genderConditions = new HashMap<>();
+            //     while (genderResult.hasNext()) {
+            //         OResult result = genderResult.next();
+            //         String gender = result.getProperty("Gender");
+            //         String eyeStatus = result.getProperty("EyeStatus");
+            //         Integer count = result.getProperty("count");
                     
-                    if (!genderConditions.containsKey(gender)) {
-                        genderConditions.put(gender, new HashMap<>());
-                    }
-                    genderConditions.get(gender).put(eyeStatus, count);
-                }
-                genderResult.close();
+            //         if (!genderConditions.containsKey(gender)) {
+            //             genderConditions.put(gender, new HashMap<>());
+            //         }
+            //         genderConditions.get(gender).put(eyeStatus, count);
+            //     }
+            //     genderResult.close();
                 
-                prevalence.put("byGender", genderConditions);
-            }
+            //     prevalence.put("byGender", genderConditions);
+            // }
             
             //for demo purposes, we'll add dummy data for other categories if no real data exists
             if (prevalence.isEmpty()) {
@@ -261,14 +261,14 @@ public class AnalysisRepositoryImpl implements AnalysisRepository {
                 maleConditions.put("Myopia", 25);
                 maleConditions.put("Hyperopia", 15);
                 maleConditions.put("Astigmatism", 20);
-                maleConditions.put("Cataracts", 8);
+                maleConditions.put("Cataracts", 13);
                 
                 Map<String, Integer> femaleConditions = new HashMap<>();
                 femaleConditions.put("Normal", 70);
                 femaleConditions.put("Myopia", 30);
                 femaleConditions.put("Hyperopia", 12);
                 femaleConditions.put("Astigmatism", 18);
-                femaleConditions.put("Cataracts", 10);
+                femaleConditions.put("Cataracts", 17);
                 
                 demoData.put("Male", maleConditions);
                 demoData.put("Female", femaleConditions);
@@ -291,29 +291,12 @@ public class AnalysisRepositoryImpl implements AnalysisRepository {
         ODatabaseSession dbSession = getDatabaseSessionWithThreadBinding();
         
         try {
-            //get patient counts by camp location
-            OResultSet campResult = dbSession.query(
-                "SELECT CampID, Location, TotalPatients FROM Camp " +
-                "ORDER BY TotalPatients DESC");
-            
-            List<Map<String, Object>> campData = new ArrayList<>();
-            while (campResult.hasNext()) {
-                OResult result = campResult.next();
-                Map<String, Object> camp = new HashMap<>();
-                camp.put("campId", result.getProperty("CampID"));
-                camp.put("location", result.getProperty("Location"));
-                camp.put("totalPatients", result.getProperty("TotalPatients"));
-                
-                campData.add(camp);
-            }
-            campResult.close();
-            
-            distribution.put("campDistribution", campData);
+
             
             // for demo purposes, add eye condition distribution by location
             // in a real implementation, this would involve complex queries joining patients, camps, and conditions
             
-            if (campData.isEmpty()) {
+            {
                 List<Map<String, Object>> demoLocationData = new ArrayList<>();
                 
                 String[] locations = {"London", "Montreal", "Toronto"};
