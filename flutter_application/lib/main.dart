@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/patient_dashboard.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
 import 'temporary_page.dart';
 import 'package:flutter_application/dashboard.dart';
 import 'admin_dashboard.dart';
+import 'healthWorker_login.dart';
 
 void main() {
   runApp(const MainApp());
@@ -17,7 +19,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  bool isDarkMode = true; // Default to dark mode
+  bool isDarkMode = false; // Default to dark mode
 
   void toggleTheme() {
     setState(() {
@@ -30,14 +32,20 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       title: 'CollectiCare',
       debugShowCheckedModeBanner: false,
-      theme: isDarkMode ? getThemeData(true) : getThemeData(false), // Apply dynamic theme
+      theme: isDarkMode
+          ? getThemeData(true)
+          : getThemeData(false), // Apply dynamic theme
 
-      initialRoute: '/temp',
+      initialRoute: '/home',
       routes: {
         '/admin-dashboard': (context) => AdminPage(),
-        '/': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
-        '/home': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
-        '/temp': (context) => TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/': (context) =>
+            Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/home': (context) =>
+            Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/temp': (context) =>
+            TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/login': (context) => HealthWorkerLoginPage()
       },
     );
   }
@@ -53,7 +61,8 @@ ThemeData getThemeData(bool isDarkMode) {
           ? Typography.whiteCupertino.apply(bodyColor: Colors.white)
           : Typography.blackCupertino.apply(bodyColor: Colors.black),
     ),
-    inputDecorationTheme: getGlobalInputTheme(isDarkMode), // Apply dynamic input theme
+    inputDecorationTheme:
+        getGlobalInputTheme(isDarkMode), // Apply dynamic input theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.blueAccent,
@@ -66,7 +75,10 @@ ThemeData getThemeData(bool isDarkMode) {
       backgroundColor: isDarkMode ? Colors.transparent : Colors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
-      titleTextStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: isDarkMode ? Colors.white : Colors.black),
+      titleTextStyle: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: isDarkMode ? Colors.white : Colors.black),
     ),
   );
 }
@@ -74,7 +86,9 @@ ThemeData getThemeData(bool isDarkMode) {
 InputDecorationTheme getGlobalInputTheme(bool isDarkMode) {
   return InputDecorationTheme(
     filled: true,
-    fillColor: isDarkMode ? Colors.white24 : Colors.white, // Darker in dark mode, white in light mode
+    fillColor: isDarkMode
+        ? Colors.white24
+        : Colors.white, // Darker in dark mode, white in light mode
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
       borderSide: BorderSide(color: Colors.blueAccent, width: 1),
@@ -87,8 +101,17 @@ InputDecorationTheme getGlobalInputTheme(bool isDarkMode) {
       borderRadius: BorderRadius.all(Radius.circular(12)),
       borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2),
     ),
-    hintStyle: TextStyle(color: isDarkMode ? Colors.white70 : Colors.black45), // Dark hint in light mode
-    labelStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // White label in dark mode, black in light mode
-    floatingLabelStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.blueAccent), // Consistent label visibility
+    hintStyle: TextStyle(
+        color: isDarkMode
+            ? Colors.white70
+            : Colors.black45), // Dark hint in light mode
+    labelStyle: TextStyle(
+        color: isDarkMode
+            ? Colors.white
+            : Colors.black), // White label in dark mode, black in light mode
+    floatingLabelStyle: TextStyle(
+        color: isDarkMode
+            ? Colors.white
+            : Colors.blueAccent), // Consistent label visibility
   );
 }

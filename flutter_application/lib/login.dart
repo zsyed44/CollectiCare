@@ -8,11 +8,12 @@ import 'dart:convert';
 //import 'dart:typed_data';
 import 'patient_dashboard.dart';
 import 'services/api_service.dart';
-import 'temporary_page.dart';
 import 'package:camera/camera.dart';
 import 'dart:math';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+//import 'temporary_page.dart';
+import 'healthWorker_login.dart';
 
 String thisCity = selectedCity;
 
@@ -139,11 +140,14 @@ class _LoginState extends State<Login> {
       print(response);
 
       name = response["Name"];
-      dob = response["DOB"].split("T")[0]; // The split is to remove the time component from the DOB
+      dob = response["DOB"].split(
+          "T")[0]; // The split is to remove the time component from the DOB
       eyeStatus = response["Eye Status"];
       age = DateTime.now().year - int.parse(dob.substring(0, 4));
       imageEmbedding = response["ImageEmbedding"];
+      
       print("FETCH: Name: $name, DOB: $dob, Eye Status: $eyeStatus, Age: $age, Image Embedding: $imageEmbedding");
+
     } catch (e) {
       print("Error: $e");
     }
@@ -211,8 +215,6 @@ class _LoginState extends State<Login> {
         catch (e) {
           print("Error: $e");
         }
-
-       
       } else {
         // If the patient is not found
         ScaffoldMessenger.of(context).showSnackBar(
@@ -255,30 +257,107 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('LOGIN')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _idController,
-              decoration: InputDecoration(
-                hintText: 'Enter ID',
-                border: OutlineInputBorder(),
+//       appBar: AppBar(title: Text('LOGIN')),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             TextField(
+//               controller: _idController,
+//               decoration: InputDecoration(
+//                 hintText: 'Enter ID',
+//                 border: OutlineInputBorder(),
+//               ),
+//             ),
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: _isLoggingIn ? null : pickImage,
+//               child: Text(
+//                   _isLoggingIn ? 'Logging in...' : 'Capture Photo to Login'),
+//             ),
+//             if (_imageData != null)
+//               Padding(
+//                 padding: const EdgeInsets.only(top: 10),
+//                 child: Image.memory(_imageData!, height: 100),
+      appBar: AppBar(
+        title: Text('Login'),
+        centerTitle: true, // Centers the title for a modern feel
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 24), // Adds horizontal padding
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Card-like container for form
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Welcome Back!',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Please enter your ID and capture a photo to login.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey,
+                          ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _idController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter ID',
+                        prefixIcon:
+                            Icon(Icons.person, color: Colors.blueAccent),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: _isLoggingIn ? null : pickImage,
+                      icon: Icon(Icons.camera_alt, size: 20),
+                      label: Text(_isLoggingIn
+                          ? 'Logging in...'
+                          : 'Upload Photo to Login'),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize:
+                            Size(double.infinity, 50), // Full width button
+                        textStyle: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    if (_imageData != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.memory(_imageData!, height: 100),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isLoggingIn ? null : pickImage,
-              child: Text(
-                  _isLoggingIn ? 'Logging in...' : 'Capture Photo to Login'),
-            ),
-            if (_imageData != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Image.memory(_imageData!, height: 100),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

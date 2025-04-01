@@ -19,7 +19,7 @@ public class OphthalmologyHistoryRepository {
         this.dbSession = dbSession;
     }
 
-    public void saveOphthalmologyHistory(OphthalmologyHistory history) {
+    public boolean saveOphthalmologyHistory(OphthalmologyHistory history) {
         try {
             ensureActiveSession();
             ODocument doc = new ODocument("OphthalmologyHistory");
@@ -29,10 +29,30 @@ public class OphthalmologyHistoryRepository {
             doc.field("lossOfVisionOnset", history.getLossOfVisionOnset());
             doc.field("lossOfVisionPain", history.isLossOfVisionPain());
             doc.field("lossOfVisionDuration", history.getLossOfVisionDuration());
+            doc.field("redness", history.isRedness());
+            doc.field("rednessEye", history.getRednessEye());
+            doc.field("rednessOnset", history.getRednessOnset());
+            doc.field("rednessPain", history.isRednessPain());
+            doc.field("rednessDuration", history.getRednessDuration());
+            doc.field("wateringEye", history.getWateringEye());
+            doc.field("wateringOnset", history.getWateringOnset());
+            doc.field("wateringPain", history.isWateringPain());
+            doc.field("wateringDuration", history.getWateringDuration());
+            doc.field("wateringDischargeType", history.getWateringDischargeType());
+            doc.field("itching", history.isItching());
+            doc.field("itchingDuration", history.IsItchingDuration());
+            doc.field("itchingEye", history.getItchingEye());
+            doc.field("pain", history.isPain());
+            doc.field("painEye", history.getPainEye());
+            doc.field("painOnset", history.getPainOnset());
+            doc.field("painDuration", history.getPainDuration());
+
             doc.save();
+            return true; // Return success
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("❌ Error adding history: " + e.getMessage());
         }
+        return false;
     }
 
     public List<OphthalmologyHistory> getAllHistories() {
@@ -52,13 +72,23 @@ public class OphthalmologyHistoryRepository {
                                 doc.field("lossOfVisionOnset", String.class),
                                 doc.field("lossOfVisionPain", Boolean.class),
                                 doc.field("lossOfVisionDuration", String.class),
+                                doc.field("redness", Boolean.class),
+                                doc.field("rednessEye", String.class),
                                 doc.field("rednessOnset", String.class),
-                                doc.field("painEye", String.class),
-                                doc.field("pain", Boolean.class),
                                 doc.field("rednessPain", Boolean.class),
+                                doc.field("rednessDuration", String.class),
                                 doc.field("wateringEye", String.class),
-                                doc.field("painDuration", String.class)
-                        ));
+                                doc.field("wateringOnset", String.class),
+                                doc.field("wateringPain", Boolean.class),
+                                doc.field("wateringDuration", String.class),
+                                doc.field("wateringDischargeType", String.class),
+                                doc.field("itching", Boolean.class),
+                                doc.field("itchingDuration", String.class),
+                                doc.field("itchingEye", String.class),
+                                doc.field("pain", Boolean.class),
+                                doc.field("painEye", String.class),
+                                doc.field("painOnset", String.class),
+                                doc.field("painDuration", String.class)));
                     }
                 }
             }

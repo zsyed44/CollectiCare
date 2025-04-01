@@ -18,6 +18,7 @@ dependencies:
   http: ^1.1.0
   google_fonts: ^6.2.1
   camera: ^0.11.1
+  syncfusion_flutter_charts: ^29.1.33
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -32,3 +33,4 @@ flutter:
     - assets/eyeLeft.png
     - assets/eyeRight.png
     - assets/mobilefacenet.tflite
+    - assets/collecticarelogo.png
