@@ -35,7 +35,8 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
 
     if (picked != null) {
       setState(() {
-        _dobController.text = "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
+        _dobController.text =
+            "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
       });
     }
   }
@@ -76,14 +77,16 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   // Name validation (only letters)
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) return "Name is required";
-    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) return "Invalid name (letters only)";
+    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value))
+      return "Invalid name (letters only)";
     return null;
   }
 
   // Phone number validation (only digits)
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) return "Phone number is required";
-    if (!RegExp(r'^\d+$').hasMatch(value)) return "Invalid phone number (numbers only)";
+    if (!RegExp(r'^\d+$').hasMatch(value))
+      return "Invalid phone number (numbers only)";
     if (value.length < 10) return "Phone number must be at least 10 digits";
     return null;
   }
