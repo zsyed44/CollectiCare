@@ -9,7 +9,8 @@ class ProfileRegistration extends StatefulWidget {
 //   const ProfileRegistration({super.key});
 
   final String userId;
-  ProfileRegistration({required this.userId});
+  final List<double> embedding;
+  ProfileRegistration({required this.userId, required this.embedding});
   @override
   _ProfileRegistrationState createState() => _ProfileRegistrationState();
 }
@@ -35,7 +36,8 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
 
     if (picked != null) {
       setState(() {
-        _dobController.text = "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
+        _dobController.text =
+            "${picked.toLocal()}".split(' ')[0]; // Format as YYYY-MM-DD
       });
     }
   }
@@ -43,6 +45,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   Future<void> _submitProfile() async {
     if (_formKey.currentState!.validate()) {
       try {
+        print(widget.embedding);
         final response = await ApiService.post('patient/add', {
           'patientID': widget.userId,
           'name': _nameController.text,
@@ -52,9 +55,11 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
           'contactInfo': _phoneController.text, // temporary/default contact
           'consentForFacialRecognition': true, // temporary/default consent
           'phone': _phoneController.text,
-          'address': thisCity, // The city that the health camp is in
+          'address':
+              _addressController.text, // The city that the health camp is in
           'eyeStatus': 'Normal', // temporary/default eye status
-          'gender': _selectedGender // include gender in the submission
+          'gender': _selectedGender, // include gender in the submission
+          'imageEmbedding': widget.embedding // Include the face embedding
         });
 
         print('API response: $response');
@@ -76,14 +81,16 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   // Name validation (only letters)
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) return "Name is required";
-    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) return "Invalid name (letters only)";
+    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value))
+      return "Invalid name (letters only)";
     return null;
   }
 
   // Phone number validation (only digits)
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) return "Phone number is required";
-    if (!RegExp(r'^\d+$').hasMatch(value)) return "Invalid phone number (numbers only)";
+    if (!RegExp(r'^\d+$').hasMatch(value))
+      return "Invalid phone number (numbers only)";
     if (value.length < 10) return "Phone number must be at least 10 digits";
     return null;
   }

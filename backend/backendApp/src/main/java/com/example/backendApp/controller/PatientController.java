@@ -55,7 +55,6 @@ public class PatientController {
         }
     }
 
-
     @GetMapping("/{patientID}/{address}")
     public ResponseEntity<?> searchPatientByIdAndAddress(@PathVariable String patientID, @PathVariable String address) {
         try {
@@ -70,8 +69,7 @@ public class PatientController {
     }
 
     /**
-     * Fetch specific details of a patient: Name, Age, DOB, Eye Status, and Health Camp Address.
-     * This method returns a hardcoded response for now.
+     * Fetch specific details of a patient: Name, Age, DOB, Eye Status, and Health Camp Address, & Image Embedding (for facial recogniton).
      */
     @GetMapping("/{patientID}/summary")
     public ResponseEntity<?> getPatientSummary(@PathVariable String patientID) {
@@ -89,8 +87,10 @@ public class PatientController {
                         "Age", age,
                         "DOB", p.getDob(),
                         "Eye Status", p.getEyeStatus(),
-                        "Health Camp Address", p.getAddress()
+                        "Health Camp Address", p.getAddress(),
+                        "ImageEmbedding", p.getImageEmbedding()
                 );
+
                 return ResponseEntity.ok(summary);
             } else {
                 return ResponseEntity.status(404)
@@ -98,7 +98,8 @@ public class PatientController {
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                    .body(Map.of("error", "An error occurred while fetching patient summary", "details", e.getMessage()));
+                    .body(Map.of("error", "An error occurred while fetching patient summary", "details",
+                            e.getMessage()));
         }
     }
 
@@ -106,7 +107,8 @@ public class PatientController {
      * Calculates age from the given date of birth.
      */
     private int calculateAge(Date dob) {
-        if (dob == null) return 0; // Default value if DOB is missing
+        if (dob == null)
+            return 0; // Default value if DOB is missing
         LocalDate birthDate = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
@@ -127,6 +129,29 @@ public class PatientController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", "An error occurred while adding the patient", "details", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/updateEye")
+    public ResponseEntity<?> updatePatient(@RequestBody Map<String, String> requestBody) {
+        try {
+            String patientID = requestBody.get("patientID");
+            String fieldName = requestBody.get("fieldName");
+            String newValue = requestBody.get("newValue");
+
+            System.out.println("Updating patient: " + patientID +
+                    ", Field: " + fieldName +
+                    ", New Value: " + newValue);
+
+            boolean success = patientRepository.updatePatientField(patientID, fieldName, newValue);
+            if (success) {
+                return ResponseEntity.ok(Map.of("message", "Patient added successfully!"));
+            } else {
+                return ResponseEntity.status(400).body(Map.of("error", "Failed to add patient"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", "An error occurred while updating the patient", "details", e.getMessage()));
         }
     }
 

@@ -20,8 +20,8 @@ public class SystemicHistoryRepository {
         this.dbSession = dbSession;
     }
 
-    //  Save Systemic History (Node)
-    public void saveSystemicHistory(SystemicHistory history) {
+    // Save Systemic History (Node)
+    public boolean saveSystemicHistory(SystemicHistory history) {
         try {
             ensureActiveSession();
             ODocument doc = new ODocument("SystemicHistory");
@@ -30,12 +30,14 @@ public class SystemicHistoryRepository {
             doc.field("DM", history.isDM());
             doc.field("heartDisease", history.isHeartDisease());
             doc.save();
+            return true; // Return success
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("❌ Error adding history: " + e.getMessage());
         }
+        return false;
     }
 
-    //  Get All Systemic History (Nodes)
+    // Get All Systemic History (Nodes)
     public List<SystemicHistory> getAllSystemicHistory() {
         List<SystemicHistory> historyList = new ArrayList<>();
 
@@ -63,7 +65,7 @@ public class SystemicHistoryRepository {
         return historyList;
     }
 
-    //  Link Systemic History to Patient (Graph Edge)
+    // Link Systemic History to Patient (Graph Edge)
     public void linkSystemicHistoryToPatient(String patientID, String historyID) {
         try {
             ensureActiveSession();
@@ -76,7 +78,7 @@ public class SystemicHistoryRepository {
         }
     }
 
-    //  Delete a Systemic History record
+    // Delete a Systemic History record
     public void deleteSystemicHistory(String historyID) {
         try {
             ensureActiveSession();
