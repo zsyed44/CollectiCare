@@ -36,12 +36,15 @@ class _MainAppState extends State<MainApp> {
           ? getThemeData(true)
           : getThemeData(false), // Apply dynamic theme
 
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
         '/admin-dashboard': (context) => AdminPage(),
-        '/': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
-        '/home': (context) => Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
-        '/temp': (context) => TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/': (context) =>
+            Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/home': (context) =>
+            Home(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+        '/temp': (context) =>
+            TempPage(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
         '/login': (context) => HealthWorkerLoginPage()
       },
     );

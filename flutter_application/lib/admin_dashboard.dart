@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'services/api_service.dart';
 import 'analysis.dart';
 
@@ -76,7 +77,7 @@ class _AdminPageState extends State<AdminPage> {
       isLoading = true;
       errorMessage = null;
     });
-    
+
     try {
       final response = await ApiService.get('campWorkers');
       print("API Response: $response");
@@ -103,6 +104,20 @@ class _AdminPageState extends State<AdminPage> {
     }
   }
 
+  Widget _buildFieldLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0, left: 4.0),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+          color: Colors.blueAccent,
+        ),
+      ),
+    );
+  }
+
   // Update the location of a worker in the database
   Future<void> updateWorkerLocation(String workerID, String newLocation) async {
     try {
@@ -110,7 +125,7 @@ class _AdminPageState extends State<AdminPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Updating location...")),
       );
-      
+
       // Make API call to update location
       await ApiService.put('campWorkers/$workerID/updateLocation', {
         "location": newLocation,
@@ -131,7 +146,7 @@ class _AdminPageState extends State<AdminPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to update location: $e")),
       );
-      
+
       // Refresh the list to reset to previous values
       fetchCampWorkers();
     }
@@ -142,7 +157,7 @@ class _AdminPageState extends State<AdminPage> {
     if (workerID.isEmpty || name.isEmpty || name.length < 3) {
       return '';
     }
-    
+
     // Get last 3 digits of workerID and combine with the name
     String lastThreeDigits = workerID.length > 3
         ? workerID.substring(workerID.length - 3)
@@ -173,14 +188,14 @@ class _AdminPageState extends State<AdminPage> {
       print("Worker added successfully!");
 
       Navigator.pop(context); // Close the dialog
-      
+
       // Clear text fields after adding
       workerIDController.clear();
       nameController.clear();
       roleController.clear();
       passwordController.clear();
       selectedLocation = null;
-      
+
       fetchCampWorkers(); // Refresh list after adding
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -200,34 +215,73 @@ class _AdminPageState extends State<AdminPage> {
     roleController.clear();
     passwordController.clear();
     selectedLocation = null;
-    
+
     showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return AlertDialog(
-              title: Text("Add Camp Worker"),
-              content: SingleChildScrollView(
+        return StatefulBuilder(builder: (context, setDialogState) {
+          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+          return AlertDialog(
+            title: Text(
+              "Add Camp Worker",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            backgroundColor: isDarkMode ? Color(0xFF202124) : Colors.white,
+            contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+            content: Container(
+              width: double.maxFinite,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Field labels with more space and better styling
+                    _buildFieldLabel("Worker ID"),
                     TextField(
                       controller: workerIDController,
-                      decoration: InputDecoration(labelText: "Worker ID"),
+                      decoration: InputDecoration(
+                        hintText: "Enter worker ID",
+                        prefixIcon: Icon(Icons.badge_outlined),
+                      ),
                     ),
+                    SizedBox(height: 16),
+
+                    _buildFieldLabel("Name"),
                     TextField(
                       controller: nameController,
-                      decoration: InputDecoration(labelText: "Name"),
+                      decoration: InputDecoration(
+                        hintText: "Enter full name",
+                        prefixIcon: Icon(Icons.person_outline),
+                      ),
                     ),
+                    SizedBox(height: 16),
+
+                    _buildFieldLabel("Role"),
                     TextField(
                       controller: roleController,
-                      decoration: InputDecoration(labelText: "Role"),
+                      decoration: InputDecoration(
+                        hintText: "Enter worker role",
+                        prefixIcon: Icon(Icons.work_outline),
+                      ),
                     ),
+                    SizedBox(height: 16),
+
+                    _buildFieldLabel("Location"),
                     DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: "Location"),
                       value: selectedLocation,
-                      hint: Text("Select Location"),
+                      hint: Text("Select location"),
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.location_on_outlined),
+                      ),
+                      icon: Icon(Icons.arrow_drop_down),
                       onChanged: (newValue) {
                         setDialogState(() {
                           selectedLocation = newValue;
@@ -241,44 +295,107 @@ class _AdminPageState extends State<AdminPage> {
                         );
                       }).toList(),
                     ),
+                    SizedBox(height: 16),
+
+                    _buildFieldLabel("Generated Password"),
                     TextField(
                       controller: passwordController,
-                      decoration: InputDecoration(labelText: "Generated Password"),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.copy),
+                          onPressed: () {
+                            // Copy password to clipboard
+                            Clipboard.setData(
+                                ClipboardData(text: passwordController.text));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text("Password copied to clipboard")),
+                            );
+                          },
+                        ),
+                      ),
                       readOnly: true,
                     ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("Cancel"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    String workerID = workerIDController.text.trim();
-                    String name = nameController.text.trim();
-                    String role = roleController.text.trim();
-                    String password = passwordController.text.trim();
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white70 : Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      String workerID = workerIDController.text.trim();
+                      String name = nameController.text.trim();
+                      String role = roleController.text.trim();
+                      String password = passwordController.text.trim();
 
-                    if (workerID.isNotEmpty &&
-                        name.isNotEmpty &&
-                        role.isNotEmpty &&
-                        password.isNotEmpty &&
-                        selectedLocation != null) {
-                      addCampWorker(workerID, name, role, password, selectedLocation!);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("All fields are required!")),
-                      );
-                    }
-                  },
-                  child: Text("Add"),
-                ),
-              ],
-            );
-          }
-        );
+                      if (workerID.isNotEmpty &&
+                          name.isNotEmpty &&
+                          role.isNotEmpty &&
+                          password.isNotEmpty &&
+                          selectedLocation != null) {
+                        addCampWorker(
+                            workerID, name, role, password, selectedLocation!);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("All fields are required!"),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          "Add Worker",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
       },
     );
   }
@@ -347,13 +464,14 @@ class _AdminPageState extends State<AdminPage> {
                       itemCount: workers.length,
                       itemBuilder: (context, index) {
                         final worker = workers[index];
-                        
+
                         // Ensure worker's location is in the available locations list
                         // If not, default to the first location
                         String displayLocation = worker.location;
                         if (!availableLocations.contains(displayLocation)) {
-                          displayLocation = availableLocations.isNotEmpty ? 
-                                           availableLocations[0] : "Unknown";
+                          displayLocation = availableLocations.isNotEmpty
+                              ? availableLocations[0]
+                              : "Unknown";
                         }
 
                         return Card(
@@ -365,7 +483,8 @@ class _AdminPageState extends State<AdminPage> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         worker.name,
@@ -375,11 +494,14 @@ class _AdminPageState extends State<AdminPage> {
                                       ),
                                       Text(
                                         "Role: ${worker.role}",
-                                        style: TextStyle(color: Colors.grey[700]),
+                                        style:
+                                            TextStyle(color: Colors.grey[700]),
                                       ),
                                       Text(
                                         "ID: ${worker.workerID}",
-                                        style: TextStyle(color: Colors.grey[700], fontSize: 12),
+                                        style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -387,16 +509,20 @@ class _AdminPageState extends State<AdminPage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Location:", style: TextStyle(fontSize: 14)),
+                                    Text("Location:",
+                                        style: TextStyle(fontSize: 14)),
                                     DropdownButton<String>(
                                       value: displayLocation,
                                       onChanged: (String? newValue) {
-                                        if (newValue != null && newValue != worker.location) {
-                                          updateWorkerLocation(worker.workerID, newValue);
+                                        if (newValue != null &&
+                                            newValue != worker.location) {
+                                          updateWorkerLocation(
+                                              worker.workerID, newValue);
                                         }
                                       },
                                       items: availableLocations
-                                          .map<DropdownMenuItem<String>>((String city) {
+                                          .map<DropdownMenuItem<String>>(
+                                              (String city) {
                                         return DropdownMenuItem<String>(
                                           value: city,
                                           child: Text(city),

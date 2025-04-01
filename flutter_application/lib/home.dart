@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/healthWorker_login.dart';
 import 'login.dart';
 import 'register.dart';
 import 'admin_dashboard.dart';
 import 'admin_login.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //import 'package:flutter_svg/flutter_svg.dart';
@@ -54,36 +54,80 @@ class Home extends StatelessWidget {
                           letterSpacing: 1.2,
                         ),
                       ),
-                      IconButton(
-                        icon: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isDarkMode
-                                ? Colors.blueAccent.withOpacity(0.2)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 8,
-                                offset: Offset(0, 2),
+                      Row(
+                        children: [
+                          // Health Worker Login Icon
+                          IconButton(
+                            icon: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isDarkMode
+                                    ? Colors.greenAccent.withOpacity(0.2)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
                               ),
-                            ],
+                              child: Icon(
+                                Icons.medical_services,
+                                color: isDarkMode
+                                    ? Colors.white70
+                                    : Colors.greenAccent.shade700,
+                                size: 24,
+                              ),
+                            ),
+                            onPressed: () {
+                              // Navigate to Health Worker Login
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        HealthWorkerLoginPage()),
+                              );
+                            },
+                            tooltip: "Health Worker Login",
                           ),
-                          child: Icon(
-                            Icons.admin_panel_settings,
-                            color:
-                                isDarkMode ? Colors.white70 : Colors.blueAccent,
-                            size: 24,
+                          SizedBox(width: 8), // Space between icons
+                          // Admin Login Icon (existing)
+                          IconButton(
+                            icon: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isDarkMode
+                                    ? Colors.blueAccent.withOpacity(0.2)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 8,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.admin_panel_settings,
+                                color: isDarkMode
+                                    ? Colors.white70
+                                    : Colors.blueAccent,
+                                size: 24,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AdminLoginPage()),
+                              );
+                            },
+                            tooltip: "Admin Login",
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminLoginPage()),
-                          );
-                        },
+                        ],
                       ),
                     ],
                   ),

@@ -4,9 +4,9 @@ public class ContactLensesHistory {
     private String patientID;
     private String frequency;
     private boolean usesContactLenses;
-    private Integer yearsOfUse;
+    private String yearsOfUse;
 
-    public ContactLensesHistory(String patientID, String frequency, boolean usesContactLenses, Integer yearsOfUse) {
+    public ContactLensesHistory(String patientID, String frequency, boolean usesContactLenses, String yearsOfUse) {
         this.patientID = patientID;
         this.frequency = frequency;
         this.usesContactLenses = usesContactLenses;
@@ -25,7 +25,7 @@ public class ContactLensesHistory {
         return usesContactLenses;
     }
 
-    public Integer isYearsOfUse() {
+    public String isYearsOfUse() {
         return yearsOfUse;
     }
 
@@ -41,7 +41,7 @@ public class ContactLensesHistory {
         this.usesContactLenses = usesContactLenses;
     }
 
-    public void setSeasonalAllergies(Integer yearsOfUse) {
+    public void setSeasonalAllergies(String yearsOfUse) {
         this.yearsOfUse = yearsOfUse;
     }
 
