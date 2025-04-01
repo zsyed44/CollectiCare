@@ -9,7 +9,8 @@ class ProfileRegistration extends StatefulWidget {
 //   const ProfileRegistration({super.key});
 
   final String userId;
-  ProfileRegistration({required this.userId});
+  final List<double> embedding;
+  ProfileRegistration({required this.userId, required this.embedding});
   @override
   _ProfileRegistrationState createState() => _ProfileRegistrationState();
 }
@@ -43,6 +44,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   Future<void> _submitProfile() async {
     if (_formKey.currentState!.validate()) {
       try {
+        print(widget.embedding);
         final response = await ApiService.post('patient/add', {
           'patientID': widget.userId,
           'name': _nameController.text,
@@ -54,7 +56,8 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
           'phone': _phoneController.text,
           'address': thisCity, // The city that the health camp is in
           'eyeStatus': 'Normal', // temporary/default eye status
-          'gender': _selectedGender // include gender in the submission
+          'gender': _selectedGender, // include gender in the submission
+          'imageEmbedding': widget.embedding // Include the face embedding
         });
 
         print('API response: $response');

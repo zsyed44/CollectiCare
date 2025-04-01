@@ -2,12 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="android.app" target="17" />
       <module name="android.flutter_plugin_android_lifecycle" target="17" />
       <module name="android.image_picker_android" target="17" />
-      <module name="gradle" target="17" />
-      <module name="gradle.main" target="17" />
-      <module name="gradle.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

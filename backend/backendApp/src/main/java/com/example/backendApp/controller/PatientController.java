@@ -70,7 +70,7 @@ public class PatientController {
     }
 
     /**
-     * Fetch specific details of a patient: Name, Age, DOB, Eye Status, and Health Camp Address.
+     * Fetch specific details of a patient: Name, Age, DOB, Eye Status, and Health Camp Address, & Image Embedding (for facial recogniton).
      * This method returns a hardcoded response for now.
      */
     @GetMapping("/{patientID}/summary")
@@ -89,7 +89,8 @@ public class PatientController {
                         "Age", age,
                         "DOB", p.getDob(),
                         "Eye Status", p.getEyeStatus(),
-                        "Health Camp Address", p.getAddress()
+                        "Health Camp Address", p.getAddress(),
+                        "ImageEmbedding", p.getImageEmbedding()
                 );
                 return ResponseEntity.ok(summary);
             } else {

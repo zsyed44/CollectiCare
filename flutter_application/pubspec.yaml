@@ -11,6 +11,10 @@ dependencies:
     sdk: flutter
   image_picker: ^1.0.7
   image_picker_for_web: any
+  image: ^3.0.1
+  google_ml_kit: ^0.16.3
+  tflite_flutter: ^0.11.0
+  hive_flutter: ^1.1.0
   http: ^1.1.0
   google_fonts: ^6.2.1
   camera: ^0.11.1
@@ -27,3 +31,4 @@ flutter:
     - assets/eyeDown.png
     - assets/eyeLeft.png
     - assets/eyeRight.png
+    - assets/mobilefacenet.tflite

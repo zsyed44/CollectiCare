@@ -115,6 +115,7 @@ public boolean addPatient(Patient patient) {
         doc.field("Address", patient.getAddress());
         doc.field("EyeStatus", patient.getEyeStatus());
         doc.field("Gender", patient.getGender());
+        doc.field("ImageEmbedding", patient.getImageEmbedding());
 
         doc.save(); // Save the document
         dbSession.commit(); // Commit transaction
@@ -159,7 +160,8 @@ private Patient mapToPatient(ODocument doc) {
             doc.field("Phone", String.class),
             doc.field("Address", String.class),
             doc.field("EyeStatus", String.class),
-            doc.field("Gender", String.class)
+            doc.field("Gender", String.class),
+            doc.field("ImageEmbedding", List.class)
     );
 }
 }
