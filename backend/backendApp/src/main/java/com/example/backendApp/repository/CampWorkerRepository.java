@@ -28,6 +28,7 @@ public class CampWorkerRepository {
             doc.field("WorkerID", worker.getWorkerID());
             doc.field("Name", worker.getName());
             doc.field("Role", worker.getRole());
+            doc.field("Password", worker.getPassword());
             doc.save();
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,8 +51,9 @@ public class CampWorkerRepository {
                         String workerID = doc.field("WorkerID", String.class);
                         String name = doc.field("Name", String.class);
                         String role = doc.field("Role", String.class);
+                        String password = doc.field("Password", String.class);
 
-                        workers.add(new CampWorker(workerID, name, role));
+                        workers.add(new CampWorker(workerID, name, role, password));
                     }
                 }
             }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'register.dart';
 import 'admin_dashboard.dart';
+import 'admin_login.dart';
 
 class Home extends StatelessWidget {
     final VoidCallback toggleTheme;
@@ -22,7 +23,7 @@ class Home extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AdminPage()),
+                MaterialPageRoute(builder: (context) => AdminLoginPage()),
               );
             },
           ),

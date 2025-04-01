@@ -35,4 +35,5 @@ public class CampWorkerController {
         campWorkerRepository.linkWorkerToCamp(workerID, campID);
         return "Camp worker assigned to camp!";
     }
+    
 }
