@@ -169,7 +169,7 @@ class _LoginState extends State<Login> {
     double similarity = dotProduct / (sqrt(norm1) * sqrt(norm2)); // sqrt is now available
     print('Cosine Similarity: $similarity');
 
-    return similarity > 0.70; // You can adjust the threshold (0.85) as needed
+    return similarity > 0.65; 
   }
 
   Future<void> login(List<double> loginImage) async {
@@ -181,7 +181,7 @@ class _LoginState extends State<Login> {
       String id = _idController.text;
       final response = await ApiService.get('patient/$id/$thisCity');
 
-      if (response != null && response['patientID'] != null) {
+      if (response != null) {
         try{
           final response2 = await ApiService.get('patient/$id/summary');
           print("LOGIN: $response2");
