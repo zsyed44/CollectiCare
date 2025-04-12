@@ -1,5 +1,7 @@
 # **CollectiCare: Offline-First Patient Data Management App**
 
+**THIS BRANCH HAS ALL THE FACIAL RECOGNITION CAPABILITIES, WHICH UNFORTUNATELY WAS NOT DEPLOYABLE**
+
 ## **Project Overview**
 This project aims to develop an **offline-first mobile application** designed for medical camps across India. The application enables healthcare workers to collect, store, and manage **patient data locally**, ensuring accessibility even in areas with limited or no internet connectivity. Once a connection is available, data will be synchronized with a **centralized database** for long-term storage and analysis.
 
