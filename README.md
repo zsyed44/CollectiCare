@@ -1,5 +1,11 @@
 # **CollectiCare: Offline-First Patient Data Management App**
 
+## **App Demo Video**
+
+**WATCH THE DEMO OF OUR APP BELOW**
+[![image](https://github.com/user-attachments/assets/e3b61e10-1d14-4a33-b4d4-2216e9dfd52f)](https://drive.google.com/file/d/1CMSarugymdLYJsyPiqWXG8AMfC8DJ58u/view?usp=sharing)
+
+
 ## **Project Overview**
 This project aims to develop an **offline-first mobile application** designed for medical camps across India. The application enables healthcare workers to collect, store, and manage **patient data locally**, ensuring accessibility even in areas with limited or no internet connectivity. Once a connection is available, data will be synchronized with a **centralized database** for long-term storage and analysis.
 
