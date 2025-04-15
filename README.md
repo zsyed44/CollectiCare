@@ -15,7 +15,7 @@ This project aims to develop an **offline-first mobile application** designed fo
 - **User Authentication**: Secure login for healthcare workers.
 - **Structured Medical Questionnaires**: Standardized forms for patient diagnosis and treatment tracking.
 - **Eye Testing**: Various tools in the application to hold on patient eye tests.
-- **Cross-Platform Support**: Built with Flutter to support both Android and iOS.
+- **Android Support**: Built with Flutter to support Android devices.
 
 ## **Tech Stack**
 ### **Frontend**
@@ -27,20 +27,13 @@ This project aims to develop an **offline-first mobile application** designed fo
 ### **Database**
 - **OrientDB**: NoSQL multi-model database for scalable data management.
 
-## **Setup Instructions**
-### **Prerequisites**
-- Install **Flutter**: [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
-- Install **Node.js** and **npm**: [Node.js Download](https://nodejs.org/)
-- Install **OrientDB**: [OrientDB Download](https://orientdb.org/download/)
 
 ## **Project Structure** 
-(TEMPORARY SAMPLE)
 ```
-├── backend/          # Node.js & Express API
-├── frontend/         # Flutter application
-├── database/        # OrientDB configurations
-├── docs/            # Documentation
-└── README.md        # Project Overview
+├── backend/                 # Springboot & Express API (with external OrientDB)
+├── flutter_application/     # Flutter application (Frontend)
+├── documentation/           # Documentation
+└── README.md                # Project Overview
 ```
 
 ---
