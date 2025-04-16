@@ -1,4 +1,4 @@
-# **CollectiCare: Offline-First Patient Data Management App**
+# **CollectiCare: Opthomology Medical App**
 
 ## **App Demo Video**
 
